@@ -1,0 +1,4 @@
+config CONFIG_FLOWMETER_ENABLE
+	bool "Enable Flow Meter validation"
+	help
+		This enables the Flow Meter to be used for validating Valve operation
