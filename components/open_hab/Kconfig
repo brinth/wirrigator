@@ -1,4 +1,4 @@
 config CONFIG_OPENHAB_ENABLE
-	bool "Enable Open HAB Communication"
+	bool "COMP_OPENHAB"
 	help
 		This enables Open HAB Communication through MQTT Protocol
