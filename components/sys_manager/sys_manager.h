@@ -8,17 +8,27 @@ namespace System
 class Manager
 {
 public:
-	Manager() = delete;
-	~Manager();
+										Manager() {};
+	virtual								~Manager() {};
 	
-	void				Init(void);
-	void				Service(void);
+	virtual	void						Init(void);
+	virtual	void						Service(void);
 
-	Manager*			GetInstance(void) { return _inst; };
+	static	Manager*					GetInstance(void);
 private:
-	Manager*	_inst;	
+	static	Manager*					_inst;	
+};
+
+class IrrigationManager : public Manager
+{
+public:
+										IrrigationManager() {};
+										~IrrigationManager() {};
+	
+	void								Init(void) override;
+	void								Service(void) override;
 };
 
 } //namespace System
-  //
+
 #endif //__CTRL_MANAGER_H__

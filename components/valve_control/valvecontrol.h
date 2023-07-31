@@ -17,13 +17,11 @@
 #ifndef __VALVECONTROL_H
 #define __VALVECONTROL_H
 
-#include <stdlib.h>
-#include <stdbool.h>
+#include "../../sys_conf.h"
 
-typedef enum valve_check {
-	VALVE_VALIDATE,
-	VALVE_NO_VALIDATE
-} valve_check_e;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum valve_logic {
 	VALVE_ACTIVE_LOW,
@@ -33,9 +31,6 @@ typedef enum valve_logic {
 typedef struct valve_conf {
 	unsigned short pin;
 	valve_logic_e logic; 
-	valve_check_e check;
-	unsigned long def_ac_sec;
-	bool init;
 } valve_conf_t;
 
 /* 
@@ -44,7 +39,7 @@ typedef struct valve_conf {
  *  Description: Sets the GPIO and other SW conf and initializes the Hardware
  * =====================================================================================
  */
-bool valve_init(const valve_conf_t conf);
+bool valve_init(const valve_conf_t *conf);
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -70,5 +65,10 @@ bool valve_close(void);
  * =====================================================================================
  */
 bool valve_open_ac(const unsigned long sec);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __VALVECONTROL_H

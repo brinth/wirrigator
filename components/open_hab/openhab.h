@@ -89,7 +89,7 @@ bool openhab_disconnect(void);
  *  Description: register callbacks for getting variable values 
  * =====================================================================================
  */
-bool openhab_register_cb(openhab_cb cb, void* arg);
+//bool openhab_register_cb(openhab_cb cb, void* arg);
 
 /* 
  * ===  FUNCTION  ======================================================================
