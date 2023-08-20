@@ -33,6 +33,13 @@ typedef struct valve_conf {
 	valve_logic_e logic; 
 } valve_conf_t;
 
+typedef void (*valve_ops_cb) (int *ret);
+
+typedef struct valve_ops {
+	valve_ops_cb open;
+	valve_ops_cb close;
+} valve_ops_t;
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  valve_init
@@ -65,6 +72,15 @@ bool valve_close(void);
  * =====================================================================================
  */
 bool valve_open_ac(const unsigned long sec);
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  valve_probe
+ *  Description: Register callbacks to be invoked on any event 
+ * =====================================================================================
+ */
+bool valve_probe(const valve_ops_t *ops);
 
 
 #ifdef __cplusplus

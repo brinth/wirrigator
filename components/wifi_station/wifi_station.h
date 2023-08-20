@@ -18,11 +18,24 @@
 #ifndef __WIFI_STATION_H__
 #define __WIFI_STATION_H__
 
+typedef struct wifi_sta_conf {
+	const char* ssid;
+	const char* pass;
+	unsigned	retry;
+}wifi_sta_conf_t;
 
-void wifi_station_init(void);
+#ifdef __cplusplus
+extern "C" {
+#endif 
 
-void wifi_connect();
+bool	wifi_sta_init(const wifi_sta_conf_t *cfg);
 
-void wifi_disconnect();
+bool	wifi_sta_connect(void);
+
+bool	wifi_sta_disconnect(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //__WIFI_STATION_H__

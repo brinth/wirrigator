@@ -4,6 +4,7 @@
 static bool					_init;
 static valve_conf_t			_cfg;
 static gpio_config_t		_gpio_cfg;
+static valve_ops_t			_ops;
 
 bool valve_init(const valve_conf_t *cfg) {	
 	// Setup cofig
@@ -24,6 +25,7 @@ bool valve_open(void) {
 	if(!_init) return false;
 	DPRINTF("%s() Opening Valve -< >-\n", __FUNCTION__);
 	int ret = gpio_set_level(_cfg.pin, (_cfg.logic == VALVE_ACTIVE_LOW) ? true : false);
+	if(_ops.open) _ops.open(&ret);
 	return (ret == ESP_OK) ? true : false;
 }
 
@@ -32,6 +34,7 @@ bool valve_close(void) {
 	if(!_init) return false;
 	DPRINTF("%s() Closing Valve -<>-\n", __FUNCTION__);
 	int ret = gpio_set_level(_cfg.pin, (_cfg.logic == VALVE_ACTIVE_LOW) ? false : true);
+	if(_ops.close) _ops.close(&ret);
 	return (ret == ESP_OK) ? true : false;
 }
 
@@ -42,4 +45,9 @@ bool valve_open_ac(const unsigned long sec) {
 	sys_delay(sec);
 	valve_close();
 	return true;
+}
+
+bool valve_probe(const valve_ops_t *ops) {
+	if (ops) _ops = *ops;
+	return !!(ops);
 }

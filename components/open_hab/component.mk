@@ -1,3 +1,0 @@
-COMPONENT_NAME := OPEN_HAB
-COMPONENT_ADD_INCLUDEDIRS := .
-$(call compile_only_if, $(CONFIG_OPENHAB_ENABLE), openhab.o)
