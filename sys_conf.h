@@ -21,7 +21,6 @@
 
 #define SNTP_SERVER_NAME "pool.ntp.org"
 #define SNTP_RETRY_COUNT 5
-#define SNTP_OBTAIN_TIME_INTERVAL_SEC	(uint16_t)(60 * 60 * 2)  //Update NTP Time for every 2 hour
 
 static inline void sys_delay_msec(uint16_t delay_ms) {
 	vTaskDelay(delay_ms / portTICK_PERIOD_MS);

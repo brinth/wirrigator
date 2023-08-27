@@ -11,6 +11,7 @@
 
 static bool						_init;
 static wifi_sta_conf_t			_cfg;
+static wifi_config_t 			_wifi_config;
 static EventGroupHandle_t 		_wifi_events;
 static unsigned 				_retry_count;
 
@@ -30,19 +31,12 @@ bool	wifi_sta_init(const wifi_sta_conf_t *cfg) {
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
 	wifi_init_config_t wifi_init_cfg  = WIFI_INIT_CONFIG_DEFAULT();
 	ESP_ERROR_CHECK(esp_wifi_init(&wifi_init_cfg));
-	wifi_config_t wifi_config = {
-		.sta = {
-			.ssid = {_cfg.ssid},
-			.password = {_cfg.pass}
-		},
-	};
-	if(strlen((char*) wifi_config.sta.password)) {
-		wifi_config.sta.threshold.authmode = WIFI_AUTH_WPA2_PSK;
+	strncpy((char*)_wifi_config.sta.ssid, _cfg.ssid, strlen(_cfg.ssid));
+	strncpy((char*)_wifi_config.sta.password, _cfg.pass, strlen(_cfg.pass));
+	if(strlen((char*) _wifi_config.sta.password)) {
+		_wifi_config.sta.threshold.authmode = WIFI_AUTH_WPA2_PSK;
 	}
-	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
-	ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
-	ESP_ERROR_CHECK(esp_wifi_start());
-	printf("INFO: Wifi Station Setup complete...\n");
+	printf("INFO: Wifi STA Init complete...\n");
 	_init = true;
 	return true;
 }
@@ -56,6 +50,9 @@ bool	wifi_sta_connect(void) {
 	_wifi_events = xEventGroupCreate();
 	ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL));
 	ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL));
+	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
+	ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &_wifi_config));
+	ESP_ERROR_CHECK(esp_wifi_start());
 	EventBits_t bits = xEventGroupWaitBits(_wifi_events,
 			WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
 			pdFALSE,
