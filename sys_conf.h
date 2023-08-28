@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_system.h"
 #include "esp_log.h"
 #include "esp_err.h"
 
@@ -19,7 +20,9 @@
 #define DPRINTF(X...)
 #endif
 
-#define SNTP_SERVER_NAME "pool.ntp.org"
+#define SNTP_SERVER_NAME_0 "pool.ntp.org"
+#define SNTP_SERVER_NAME_1 "asia.pool.ntp.org"
+#define SNTP_SERVER_NAME_2 "in.pool.ntp.org"
 #define SNTP_RETRY_COUNT 5
 
 static inline void sys_delay_msec(uint16_t delay_ms) {
