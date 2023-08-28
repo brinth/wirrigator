@@ -1,4 +1,6 @@
 #include <time.h>
+#include "esp_netif.h"
+#include "esp_event.h"
 #include "lwip/apps/sntp.h"
 #include "sys_manager.h"
 #include "../../sys_conf.h"
@@ -9,6 +11,7 @@
 
 static void							cb_valve_open(int *);
 static void							cb_valve_close(int *);
+static void							update_localtime(void);
 
 namespace System {
 
@@ -16,7 +19,6 @@ Manager* Manager::_inst = NULL;
 
 TaskHandle_t IrrigationManager :: _flow_meter_task_handle;
 TaskHandle_t IrrigationManager :: _mqtt_task_handle;
-TaskHandle_t IrrigationManager :: _sntp_task_handle;
 
 Manager* Manager::GetInstance(void) {
 	if(_inst == NULL)
@@ -26,6 +28,7 @@ Manager* Manager::GetInstance(void) {
 
 
 void IrrigationManager :: Init(void) {
+	bool wifi_connected = false;
 	DPRINTF("%s() Initializing...\n", __FUNCTION__);
 	
 	// Configure Solenoid Valve
@@ -35,6 +38,10 @@ void IrrigationManager :: Init(void) {
 	if(!valve_init(&v_cfg)) {
 		printf("ERR: Initializing Valve failed\n");
 	}
+	valve_ops_t v_ops;
+	v_ops.open = cb_valve_open;
+	v_ops.close = cb_valve_close;
+	valve_probe(&v_ops);
 	// Configure Flow Meter
 
 	// Connect to WiFi
@@ -45,16 +52,14 @@ void IrrigationManager :: Init(void) {
 	if(!wifi_sta_init(&w_cfg)) {
 		printf("ERR: Initializing Wifi STA SSID(%s)\n", CONFIG_WIFI_SSID);
 	}
-	if(!wifi_sta_connect()) {
+	if(!(wifi_connected = wifi_sta_connect())) {
 		printf("ERR: WiFI STA Not Connected\n");
 	}
+	if(wifi_connected) update_localtime();
 	// Flow meter 
-	xTaskCreate(run_flow_meter_task, "FlowMeter_task", 512, this, 5, &_flow_meter_task_handle);
+	xTaskCreate(run_flow_meter_task, "FlowMeter_task", 5000, this, 5, &_flow_meter_task_handle);
 	// OpenHAB Connection (MQTT)
-	xTaskCreate(run_mqtt_task, "MQTT_task", 512, this, 10, &_mqtt_task_handle);
-	// NTP Task
-	xTaskCreate(run_sntp_task, "SNTP_task", 512, this, 20, &_sntp_task_handle);
-	vTaskStartScheduler();
+	xTaskCreate(run_mqtt_task, "MQTT_task", 5000, this, 10, &_mqtt_task_handle);
 }
 
 void IrrigationManager :: Service(void) {
@@ -77,46 +82,47 @@ void IrrigationManager :: Service(void) {
 	}
 }
 
-void IrrigationManager :: run_flow_meter_task (void* arg) {
-	
+void IrrigationManager :: run_flow_meter_task (void* arg) {	
 	for(;;) {
+		printf("INFO: Running Flow Meter Task...\n");
 		sys_delay(1);	
 	}
 }
 
 void IrrigationManager :: run_mqtt_task (void* arg) {
-	valve_ops_t v_ops;
-	v_ops.open = cb_valve_open;
-	v_ops.close = cb_valve_close;
-	valve_probe(&v_ops);
 	for(;;) {
 		// If command is passed through MQTT update valve status
+		printf("INFO: Running MQTT Task...\n");
 		sys_delay(1);
 	}
 }
 
-void IrrigationManager :: run_sntp_task (void* arg) {
-	sntp_setoperatingmode(SNTP_OPMODE_POLL);
-	sntp_setservername(0, SNTP_SERVER_NAME);
-	sntp_init();
-	setenv("TZ", "IST", 1);
-	tzset();
-	for(;;) {
-		printf("INFO: Updating local time from NTP Server(%s)\n", SNTP_SERVER_NAME); 	
-		time_t now = 0;
-		struct tm timeinfo = {0};
-		unsigned retry = 0;
-		while(timeinfo.tm_year < (2016 - 1900) && ++retry < SNTP_RETRY_COUNT) {
-			printf("INFO: Waiting for system time to be set... (%d)\n", retry);
-			sys_delay(2);
-			time(&now);
-			localtime_r(&now, &timeinfo);
-		}
-		sys_delay(SNTP_OBTAIN_TIME_INTERVAL_SEC);
-	}
-}
 
 } //namespace System
+
+void update_localtime(void) {
+	unsigned		retry		= 0;
+	char			buf[64]		= {};
+	time_t			now			= 0;
+	struct tm		timeinfo	= {};
+	sntp_stop();
+	sntp_setoperatingmode(SNTP_OPMODE_POLL);
+	sntp_setservername(0, SNTP_SERVER_NAME_0); 
+	sntp_setservername(1, SNTP_SERVER_NAME_1);
+	sntp_setservername(2, SNTP_SERVER_NAME_2);
+	sntp_init();
+	setenv("TZ", "UTC-05:30", 1); //IST
+	tzset();
+	//printf("INFO: Updating local time from NTP Server\n");
+	while(timeinfo.tm_year < (2023 - 1900) && ++retry < SNTP_RETRY_COUNT) {
+		printf("INFO: Waiting for system time to be set... (%d)\n", retry);
+		sys_delay(2);
+		time(&now);
+		localtime_r(&now, &timeinfo);
+	}
+	strftime(buf, sizeof(buf), "%c", &timeinfo);
+	printf("INFO: Localtime updated to %s\n", buf);
+}
 
 void cb_valve_open(int* ret) {
 	(void) ret;

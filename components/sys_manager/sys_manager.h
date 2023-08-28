@@ -30,10 +30,8 @@ public:
 private:
 	static void							run_flow_meter_task(void *);
 	static void							run_mqtt_task(void *);
-	static void							run_sntp_task(void *);
 	static TaskHandle_t					_flow_meter_task_handle;
 	static TaskHandle_t					_mqtt_task_handle;
-	static TaskHandle_t					_sntp_task_handle;	
 };
 
 } //namespace System
