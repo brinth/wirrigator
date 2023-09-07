@@ -2,9 +2,13 @@
 #include "freertos/queue.h"
 #include "../../sys_conf.h"
 
-static flow_meter_conf_t _cfg;
-static unsigned long long flow_pulse_count;
-static xQueueHandle flow_pulse_queue = NULL;
+static flow_meter_conf_t 		_cfg;
+static flow_meter_state_t 		_state;
+static long 					_discharge;
+static long						_volume;
+static unsigned long long 		flow_pulse_count;
+static xQueueHandle 			flow_pulse_queue = NULL;
+
 static void flow_intr_handler(void* arg);
 static void run_flow_meter_task(void* arg);
 
@@ -31,6 +35,18 @@ void flow_meter_start(void) {
 	xTaskCreate(run_flow_meter_task, "FlowMeter Task", 2000, NULL, PRIORITY_FLOW_METER, NULL);
 }
 
+flow_meter_state_t flow_meter_get_state(void) {
+	return _state;
+}
+
+long flow_meter_get_discharge(void) {
+	return _discharge;
+}
+
+long flow_meter_get_volume(void) {
+	return _volume;
+}
+
 void flow_intr_handler(void* arg) {
 	void (arg);
 	xQueueSendFromISR(flow_pulse_queue, &(++flow_pulse_count), NULL);
@@ -46,7 +62,7 @@ void run_flow_meter_task(void* arg) {
 		if(xQueueReceive(flow_pulse_queue, &pulse_count, portMAX_DELAY)) {
 			if(pulse_count - prev_pulse_count > pulse_count_trigger) {
 				printf("Flow Detected\n");
-				//Send Event & Measure Flow
+				//Send Event, Measure Flow & Volume
 			}
 		}
 	}

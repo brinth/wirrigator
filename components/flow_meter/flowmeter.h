@@ -24,8 +24,19 @@ typedef struct flow_meter_conf {
 	unsigned long ppl;
 }flow_meter_conf_t;
 
+typedef enum flow_meter_state {
+	NO_FLOW_DETECTED,
+	FLOW_DETECTED,
+}flow_meter_state_t;
+
 bool flow_meter_init(const flow_meter_conf_t *cfg);
 
 void flow_meter_start(void);
+
+flow_meter_state_t flow_meter_get_state(void);
+
+long flow_meter_get_discharge(void);
+
+long flow_meter_get_volume(void);
 
 #endif // __FLOWMETER_H_

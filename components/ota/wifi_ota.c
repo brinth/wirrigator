@@ -8,6 +8,7 @@
 
 void wifi_ota_start(void) {
   printf("WiFi OTA Started\n");
+  // Send LED Alert when OTA update is on progress
 }
 
 

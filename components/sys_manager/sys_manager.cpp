@@ -64,7 +64,7 @@ void IrrigationManager :: Init(void) {
 		mqtt_client_start(MQTT_BROKER_IP, MQTT_BROKER_PORT);
 	} else {
 		printf("ERR: WiFI STA Not Connected\n");
-		// Send event for LED Alert
+		// Send LED Warning
 	}
 	vTaskStartScheduler();
 }
@@ -79,8 +79,10 @@ void IrrigationManager :: Service(void) {
 	//if(cur_time_info->tm_hour == 6 || cur_time_info->tm_hour == 18) {
 	if(cur_time_info.tm_sec == 0 || cur_time_info.tm_sec == 30) { // Just for Debug
 		valve_open();
+		// Send LED Alert when Flow is not detected after opening valve
 		sys_delay(IRRIGATION_TIME_SEC);
 		valve_close();
+		// Send LED Alert when Flow is detected even after closing valve
 	}
 }
 
