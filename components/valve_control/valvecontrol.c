@@ -7,17 +7,20 @@ static gpio_config_t		_gpio_cfg;
 static valve_ops_t			_ops;
 
 bool valve_init(const valve_conf_t *cfg) {	
+	_init = false;
 	// Setup cofig
-	_cfg = *cfg;
-	_gpio_cfg.intr_type = GPIO_INTR_DISABLE;
-	_gpio_cfg.mode = GPIO_MODE_OUTPUT;
-	_gpio_cfg.pin_bit_mask = (1ULL << _cfg.pin);
-	_gpio_cfg.pull_down_en = _cfg.logic;
-	_gpio_cfg.pull_up_en = !_cfg.logic;
-	gpio_config(&_gpio_cfg);
-	DPRINTF("%s() Valve Initialized\n", __FUNCTION__);
-	_init = true;
-	return true;
+	if(cfg) {
+		_cfg = *cfg;
+		_gpio_cfg.intr_type = GPIO_INTR_DISABLE;
+		_gpio_cfg.mode = GPIO_MODE_OUTPUT;
+		_gpio_cfg.pin_bit_mask = (1ULL << _cfg.pin);
+		_gpio_cfg.pull_down_en = _cfg.logic;
+		_gpio_cfg.pull_up_en = !_cfg.logic;
+		gpio_config(&_gpio_cfg);
+		DPRINTF("%s() Valve Initialized\n", __FUNCTION__);
+		_init = true;
+	}
+	return _init;
 }
 
 bool valve_open(void) {

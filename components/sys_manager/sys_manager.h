@@ -11,8 +11,8 @@ public:
 										Manager() {};
 	virtual								~Manager() {};
 	
-	virtual	void						Init(void);
-	virtual	void						Service(void);
+	virtual	void						Init(void) = 0;
+	virtual	void						Service(void) = 0;
 
 	static	Manager*					GetInstance(void);
 private:
@@ -28,10 +28,7 @@ public:
 	void								Init(void) override;
 	void								Service(void) override;
 private:
-	static void							run_flow_meter_task(void *);
-	static void							run_mqtt_task(void *);
-	static TaskHandle_t					_flow_meter_task_handle;
-	static TaskHandle_t					_mqtt_task_handle;
+	bool								_init;
 };
 
 } //namespace System

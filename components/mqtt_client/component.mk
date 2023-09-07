@@ -1,0 +1,3 @@
+COMPONENT_NAME := MQTT_CLIENT
+COMPONENT_ADD_INCLUDEDIRS := .
+$(call compile_only_if, $(CONFIG_MQTT_CLIENT), mqtt_client.o)

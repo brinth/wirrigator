@@ -14,9 +14,18 @@
  *
  * =====================================================================================
  */
+#include <stdbool.h>
 
 #ifndef __FLOWMETER_H_
 #define __FLOWMETER_H_
 
+typedef struct flow_meter_conf {
+	unsigned pin;
+	unsigned long ppl;
+}flow_meter_conf_t;
+
+bool flow_meter_init(const flow_meter_conf_t *cfg);
+
+void flow_meter_start(void);
 
 #endif // __FLOWMETER_H_
