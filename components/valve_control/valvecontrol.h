@@ -17,11 +17,11 @@
 #ifndef __VALVECONTROL_H
 #define __VALVECONTROL_H
 
-#include "../../sys_conf.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "../../sys_conf.h"
 
 typedef enum valve_logic {
 	VALVE_ACTIVE_LOW,

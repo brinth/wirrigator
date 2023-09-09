@@ -11,6 +11,7 @@
 
 static bool						_init;
 static wifi_sta_conf_t			_cfg;
+static wifi_sta_status_t		_status;
 static wifi_config_t 			_wifi_config;
 static EventGroupHandle_t 		_wifi_events;
 static unsigned 				_retry_count;
@@ -23,12 +24,12 @@ bool	wifi_sta_init(const wifi_sta_conf_t *cfg) {
 		return false;
 	}
 	_cfg = *cfg;
+	_status = STA_DISCONNECTED;
 	if(strlen(_cfg.ssid) <= 0 || strlen(_cfg.pass) <= 0) {
 		printf("ERR(%s): Invalid ssid or password\n", __FUNCTION__);
 		return false;
 	}
 	tcpip_adapter_init();
-	ESP_ERROR_CHECK(esp_event_loop_create_default());
 	wifi_init_config_t wifi_init_cfg  = WIFI_INIT_CONFIG_DEFAULT();
 	ESP_ERROR_CHECK(esp_wifi_init(&wifi_init_cfg));
 	strncpy((char*)_wifi_config.sta.ssid, _cfg.ssid, strlen(_cfg.ssid));
@@ -48,6 +49,7 @@ bool	wifi_sta_connect(void) {
 		return ret;
 	}
 	_wifi_events = xEventGroupCreate();
+	_status = STA_CONNECTING;
 	ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL));
 	ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL));
 	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
@@ -71,12 +73,26 @@ bool	wifi_sta_connect(void) {
 	ESP_ERROR_CHECK(esp_event_handler_unregister(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler));
 	ESP_ERROR_CHECK(esp_event_handler_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler));
 	vEventGroupDelete(_wifi_events);
+	printf("%s : %d\n", __FUNCTION__, __LINE__);
+	if(ret) {
+		_status = STA_CONNECTED;
+		DPRINTF("Connected Event 0x%x\n", EVENT_BIT(WIFI_CONNECTION_SUCCESS));
+		xEventGroupSetBits(_sys_events, EVENT_BIT(WIFI_CONNECTION_SUCCESS));
+	} else {
+		_status = STA_DISCONNECTED;
+		DPRINTF("Disconnected Event 0x%x\n", EVENT_BIT(WIFI_CONNECTION_FAILURE));
+		xEventGroupSetBits(_sys_events, EVENT_BIT(WIFI_CONNECTION_FAILURE));
+	}
 	return ret;
 }
 
 bool 	wifi_sta_disconnect(void) {
 	// NOP	
 	return true;
+}
+
+wifi_sta_status_t	wifi_sta_status(void) {
+	return _status;
 }
 
 void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data) {
@@ -96,5 +112,4 @@ void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, voi
 		_retry_count = 0;
 		xEventGroupSetBits(_wifi_events, WIFI_CONNECTED_BIT);
 	}
-	printf("ERR: Connecting to WiFi (SSID: %s)\n", _cfg.ssid);
 }

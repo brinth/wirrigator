@@ -5,7 +5,7 @@
  *      Author: bkhanna
  */
 #include "led_ctrl.h"
-#include "../../sys_conf.h"
+#include "driver/gpio.h"
 
 static led_conf_t _cfg;
 static void run_led_task(void* arg);
@@ -19,6 +19,7 @@ bool led_ctrl_init(const led_conf_t *cfg) {
 		io_cfg.mode = GPIO_MODE_OUTPUT;
 		io_cfg.pin_bit_mask = (1ULL << _cfg.red) | (1ULL << _cfg.yellow) | (1ULL << _cfg.green);
 		io_cfg.pull_down_en = true;
+		io_cfg.pull_up_en = false;
 		gpio_config(&io_cfg);
 		return true;
 	}
@@ -26,22 +27,59 @@ bool led_ctrl_init(const led_conf_t *cfg) {
 }
 
 void led_ctrl_start(void) {
-	xTaskCreate(run_led_task, "LED Task", 2000, NULL, PRIORITY_LED_CTRL, NULL);
+	xTaskCreate(run_led_task, "LED Task", 4000, NULL, PRIORITY_LED_CTRL, NULL);
 }
 
 void run_led_task(void* arg) {
-	printf("Running LED Task\n");
+	gpio_set_level(_cfg.red, false);
+	gpio_set_level(_cfg.yellow, false);
+	gpio_set_level(_cfg.green, false);
+	printf("Starting LED Task\n");
 	// Blink All LEDs (Green -> Yellow -> Red)
-	gpio_set_level((1ULL << _cfg.green), true);
-	sys_delay_ms(500);
-	gpio_set_level((1ULL << _cfg.green), false);
-	gpio_set_level((1ULL << _cfg.yellow), true);
-	sys_delay_ms(500);
-	gpio_set_level((1ULL << _cfg.yellow), false);
-	gpio_set_level((1ULL << _cfg.red), true);
-	sys_delay_ms(500);
+	gpio_set_level(_cfg.green, true);
+	sys_delay(1);
+	gpio_set_level(_cfg.green, false);
+	gpio_set_level(_cfg.yellow, true);
+	sys_delay(1);
+	gpio_set_level(_cfg.yellow, false);
+	gpio_set_level(_cfg.red, true);
+	sys_delay(1);
 	for(;;) {
-		sys_delay(1);
+		EventBits_t wait_bits = 0xFFFF;
+		EventBits_t bits = xEventGroupWaitBits(_sys_events, wait_bits, pdTRUE, pdFALSE, portMAX_DELAY);
+		if(bits & EVENT_BIT(WIFI_CONNECTION_SUCCESS)) {
+			DPRINTF("LED: WiFi Connection Success\n");
+			gpio_set_level(_cfg.green, true);
+			sys_delay(5);
+			gpio_set_level(_cfg.green, false);
+		} else if(bits & EVENT_BIT(WIFI_CONNECTION_FAILURE)) {
+			DPRINTF("LED: WiFi Connection Failure\n");
+			gpio_set_level(_cfg.red, true);
+		} else if(bits & EVENT_BIT(OTA_UPGRADE_IN_PROGRESS)) {
+			DPRINTF("LED: OTA Upgrade in Progress\n");
+			gpio_set_level(_cfg.yellow, true);
+		} else if(bits & EVENT_BIT(OTA_UPGRADE_COMPLETE)) {
+			DPRINTF("LED: OTA Upgrade Complete\n");
+			gpio_set_level(_cfg.yellow, false);
+			gpio_set_level(_cfg.green, true);
+			sys_delay(1);
+			gpio_set_level(_cfg.green, false);
+		} else if(bits & EVENT_BIT(VALVE_OPENED)) {
+			DPRINTF("LED: Valve Opened\n");
+			gpio_set_level(_cfg.green, true);
+		} else if(bits & EVENT_BIT(VALVE_CLOSED)) {
+			DPRINTF("LED: Valve Closed\n");
+			gpio_set_level(_cfg.green, false);
+		} else if(bits & EVENT_BIT(FLOW_STARTED)) {
+			DPRINTF("LED: Flow Started\n");
+			gpio_set_level(_cfg.yellow, true);
+		} else if(bits & EVENT_BIT(FLOW_STOPPED)) {
+			DPRINTF("LED: Flow Stopped\n");
+			gpio_set_level(_cfg.yellow, false);
+		}
+		else {
+			printf("LED: Misc Event \n");
+		}
 	}
 }
 

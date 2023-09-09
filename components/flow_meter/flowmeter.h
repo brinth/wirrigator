@@ -19,6 +19,10 @@
 #ifndef __FLOWMETER_H_
 #define __FLOWMETER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct flow_meter_conf {
 	unsigned pin;
 	unsigned long ppl;
@@ -38,5 +42,9 @@ flow_meter_state_t flow_meter_get_state(void);
 long flow_meter_get_discharge(void);
 
 long flow_meter_get_volume(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __FLOWMETER_H_

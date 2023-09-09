@@ -4,7 +4,8 @@
  *  Created on: 06-Sep-2023
  *      Author: bkhanna
  */
-
+#include "sntp_client.h"
+#include "../../sys_conf.h"
 
 void sntp_update_localtime(void) {
 	unsigned		retry		= 0;
@@ -28,4 +29,17 @@ void sntp_update_localtime(void) {
 	}
 	strftime(buf, sizeof(buf), "%c", &timeinfo);
 	printf("INFO: Localtime updated to %s\n", buf);
+}
+
+
+bool sntp_get_localtime(struct tm* t) {
+	time_t cur_time;
+	struct tm cur_time_info;
+	time(&cur_time);
+	localtime_r(&cur_time, &cur_time_info);
+	if(t){
+		*t = cur_time_info;
+		return true;
+	}
+	return false;
 }

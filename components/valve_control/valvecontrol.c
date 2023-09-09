@@ -1,4 +1,5 @@
 #include "valvecontrol.h"
+#include "../../sys_conf.h"
 #include "driver/gpio.h"
 
 static bool					_init;
@@ -28,6 +29,7 @@ bool valve_open(void) {
 	if(!_init) return false;
 	DPRINTF("%s() Opening Valve -< >-\n", __FUNCTION__);
 	int ret = gpio_set_level(_cfg.pin, (_cfg.logic == VALVE_ACTIVE_LOW) ? true : false);
+	xEventGroupSetBits(_sys_events, EVENT_BIT(VALVE_OPENED));
 	if(_ops.open) _ops.open(&ret);
 	return (ret == ESP_OK) ? true : false;
 }
@@ -37,6 +39,7 @@ bool valve_close(void) {
 	if(!_init) return false;
 	DPRINTF("%s() Closing Valve -<>-\n", __FUNCTION__);
 	int ret = gpio_set_level(_cfg.pin, (_cfg.logic == VALVE_ACTIVE_LOW) ? false : true);
+	xEventGroupSetBits(_sys_events, EVENT_BIT(VALVE_CLOSED));
 	if(_ops.close) _ops.close(&ret);
 	return (ret == ESP_OK) ? true : false;
 }

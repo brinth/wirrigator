@@ -5,8 +5,6 @@
 #include "../sys_conf.h"
 #include "sys_manager.h"
 
-#define STARTUP_DELAY 5
-
 #ifdef __cplusplus
 extern "C" {
 #endif

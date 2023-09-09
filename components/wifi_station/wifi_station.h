@@ -24,15 +24,23 @@ typedef struct wifi_sta_conf {
 	unsigned	retry;
 }wifi_sta_conf_t;
 
+typedef enum wifi_sta_status {
+	STA_DISCONNECTED,
+	STA_CONNECTING,
+	STA_CONNECTED
+}wifi_sta_status_t;
+
 #ifdef __cplusplus
 extern "C" {
 #endif 
 
-bool	wifi_sta_init(const wifi_sta_conf_t *cfg);
+bool						wifi_sta_init(const wifi_sta_conf_t *cfg);
 
-bool	wifi_sta_connect(void);
+bool						wifi_sta_connect(void);
 
-bool	wifi_sta_disconnect(void);
+bool						wifi_sta_disconnect(void);
+
+wifi_sta_status_t			wifi_sta_status(void);
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,2 @@
 COMPONENT_NAME := FLOW_METER
 COMPONENT_ADD_INCLUDEDIRS := .
-$(call compile_only_if, $(CONFIG_FLOWMETER_ENABLE), flowmeter.o) 

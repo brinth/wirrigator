@@ -1,4 +1,0 @@
-config CONFIG_MQTT_CLIENT
-	bool "COMP_MQTT_CLIENT"
-	help
-		This enables the MQTT client for connecting to broker
