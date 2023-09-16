@@ -73,7 +73,6 @@ bool	wifi_sta_connect(void) {
 	ESP_ERROR_CHECK(esp_event_handler_unregister(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler));
 	ESP_ERROR_CHECK(esp_event_handler_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler));
 	vEventGroupDelete(_wifi_events);
-	printf("%s : %d\n", __FUNCTION__, __LINE__);
 	if(ret) {
 		_status = STA_CONNECTED;
 		DPRINTF("Connected Event 0x%x\n", EVENT_BIT(WIFI_CONNECTION_SUCCESS));

@@ -66,8 +66,8 @@ void IrrigationManager :: Init(void) {
 		printf("ERR: Initializing Wifi STA SSID(%s)\n", CONFIG_WIFI_SSID);
 	}
 	if(wifi_sta_connect()) {
-		wifi_ota_start();
 		sntp_update_localtime();
+		wifi_ota_start();
 		//mqtt_client_start(MQTT_BROKER_IP, MQTT_BROKER_PORT);
 	} else {
 		printf("ERR: WiFI STA Not Connected\n");
@@ -76,7 +76,6 @@ void IrrigationManager :: Init(void) {
 
 void IrrigationManager :: Service(void) {
 	struct tm ctime;
-	DPRINTF("%s() Servicing...\n", __FUNCTION__);
 	if(wifi_sta_status() == STA_CONNECTED) {
 		sntp_get_localtime(&ctime);
 		//if(cur_time_info->tm_hour == 6 || cur_time_info->tm_hour == 18) {

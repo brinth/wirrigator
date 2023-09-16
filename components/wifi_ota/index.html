@@ -53,7 +53,19 @@
     </div>
 
     <script>
-        // JavaScript code
+        function getUploadStatus() {
+            fetch("/upload_status")
+                .then(function(response) {
+                    return response.text();
+                })
+                .then(function(message) {
+                    var uploadStatus = document.getElementById("uploadStatus");
+                    uploadStatus.innerHTML = message;
+                })
+                .catch(function (error) {
+                    console.log("Error", error);
+                });
+        }
         document.getElementById('uploadForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
@@ -69,12 +81,13 @@
                 return response.text();
             })
             .then(function (message) {
-                document.getElementById('uploadStatus').textContent = message;
+                console.log("Response:", message);
             })
             .catch(function (error) {
                 console.error('Error:', error);
             });
         });
+        setInterval(getUploadStatus, 1000);
     </script>
 </body>
 </html>

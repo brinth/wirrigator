@@ -11,6 +11,7 @@
 #include "freertos/event_groups.h"
 #include "freertos/queue.h"
 #include "esp_system.h"
+#include "esp_event.h"
 #include "esp_log.h"
 #include "esp_err.h"
 
@@ -22,8 +23,9 @@
 #else
 #define DPRINTF(X...)
 #endif
-
-#define EVENT_BIT(pos)					(1U << pos)
+#define	EVENT_BIT(pos)					(1U << pos)
+#define	MAX(a, b) ((a) > (b) ? (a) : (b))
+#define	MIN(a, b) ((a) < (b) ? (a) : (b))
 
 #define STARTUP_DELAY					0
 
