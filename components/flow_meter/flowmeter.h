@@ -37,6 +37,8 @@ bool flow_meter_init(const flow_meter_conf_t *cfg);
 
 void flow_meter_start(void);
 
+void flow_meter_stop(void);
+
 flow_meter_state_t flow_meter_get_state(void);
 
 long flow_meter_get_discharge(void);

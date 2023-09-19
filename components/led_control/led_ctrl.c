@@ -45,40 +45,18 @@ void run_led_task(void* arg) {
 	gpio_set_level(_cfg.red, true);
 	sys_delay(1);
 	for(;;) {
-		EventBits_t wait_bits = 0xFFFF;
+		EventBits_t wait_bits = 0xFFFF; // Wait for all events
 		EventBits_t bits = xEventGroupWaitBits(_sys_events, wait_bits, pdTRUE, pdFALSE, portMAX_DELAY);
-		if(bits & EVENT_BIT(WIFI_CONNECTION_SUCCESS)) {
-			DPRINTF("LED: WiFi Connection Success\n");
+		if(bits & (EVENT_BIT(WIFI_CONNECTION_SUCCESS) | EVENT_BIT(FLOW_STARTED) | EVENT_BIT(OTA_UPGRADE_COMPLETE))) {
 			gpio_set_level(_cfg.green, true);
-			sys_delay(5);
-			gpio_set_level(_cfg.green, false);
-		} else if(bits & EVENT_BIT(WIFI_CONNECTION_FAILURE)) {
-			DPRINTF("LED: WiFi Connection Failure\n");
-			gpio_set_level(_cfg.red, true);
-		} else if(bits & EVENT_BIT(OTA_UPGRADE_IN_PROGRESS)) {
-			DPRINTF("LED: OTA Upgrade in Progress\n");
-			gpio_set_level(_cfg.yellow, true);
-		} else if(bits & EVENT_BIT(OTA_UPGRADE_COMPLETE)) {
-			DPRINTF("LED: OTA Upgrade Complete\n");
-			gpio_set_level(_cfg.yellow, false);
-			gpio_set_level(_cfg.green, true);
-			sys_delay(1);
-			gpio_set_level(_cfg.green, false);
-		} else if(bits & EVENT_BIT(VALVE_OPENED)) {
-			DPRINTF("LED: Valve Opened\n");
-			gpio_set_level(_cfg.green, true);
-		} else if(bits & EVENT_BIT(VALVE_CLOSED)) {
-			DPRINTF("LED: Valve Closed\n");
-			gpio_set_level(_cfg.green, false);
-		} else if(bits & EVENT_BIT(FLOW_STARTED)) {
-			DPRINTF("LED: Flow Started\n");
-			gpio_set_level(_cfg.yellow, true);
-		} else if(bits & EVENT_BIT(FLOW_STOPPED)) {
-			DPRINTF("LED: Flow Stopped\n");
-			gpio_set_level(_cfg.yellow, false);
+			if(bits & EVENT_BIT(OTA_UPGRADE_COMPLETE)) gpio_set_level(_cfg.yellow, false);
 		}
-		else {
-			printf("LED: Misc Event \n");
+		if(bits & (EVENT_BIT(VALVE_OPENED) | EVENT_BIT(OTA_UPGRADE_IN_PROGRESS))) {
+			gpio_set_level(_cfg.yellow, true);
+		}
+		if(bits & (EVENT_BIT(WIFI_CONNECTION_FAILURE) | EVENT_BIT(VALVE_CLOSED) | EVENT_BIT(FLOW_STOPPED))) {
+			gpio_set_level(_cfg.red, true);
+			if(bits & EVENT_BIT(FLOW_STOPPED)) gpio_set_level(_cfg.green, false);
 		}
 	}
 }

@@ -53,6 +53,7 @@
     </div>
 
     <script>
+        const getUploadStatusTimer = setInterval(getUploadStatus, 1000);
         function getUploadStatus() {
             fetch("/upload_status")
                 .then(function(response) {
@@ -68,7 +69,6 @@
         }
         document.getElementById('uploadForm').addEventListener('submit', function (e) {
             e.preventDefault();
-
             var formData = new FormData();
             var fileInput = document.getElementById('fileInput');
             formData.append('file', fileInput.files[0]);
@@ -87,7 +87,6 @@
                 console.error('Error:', error);
             });
         });
-        setInterval(getUploadStatus, 1000);
     </script>
 </body>
 </html>

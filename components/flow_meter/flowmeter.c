@@ -2,6 +2,7 @@
 #include "../../sys_conf.h"
 #include "driver/gpio.h"
 
+static TaskHandle_t				_flow_task_handle;
 static flow_meter_conf_t 		_cfg;
 static flow_meter_state_t 		_state;
 static long 					_discharge;
@@ -33,7 +34,11 @@ bool flow_meter_init(const flow_meter_conf_t* cfg) {
 }
 
 void flow_meter_start(void) {
-	xTaskCreate(run_flow_meter_task, "FlowMeter Task", 4000, NULL, PRIORITY_FLOW_METER, NULL);
+	xTaskCreate(run_flow_meter_task, "FlowMeter Task", 4000, NULL, PRIORITY_FLOW_METER, &_flow_task_handle);
+}
+
+void flow_meter_start(void) {
+	vTaskDelete(&_flow_task_handle);
 }
 
 flow_meter_state_t flow_meter_get_state(void) {
@@ -61,8 +66,10 @@ void run_flow_meter_task(void* arg) {
 		if(xQueueReceive(flow_pulse_queue, &pulse_count, portMAX_DELAY)) {
 			if(pulse_count - prev_pulse_count > pulse_count_trigger) {
 				printf("Flow Detected\n");
+				xEventGroupSetBits(_sys_events, EVENT_BIT(FLOW_STARTED));
 				//Send Event, Measure Flow & Volume
 			}
+			xEventGroupSetBits(_sys_events, EVENT_BIT(FLOW_STOPPED));
 		}
 	}
 }

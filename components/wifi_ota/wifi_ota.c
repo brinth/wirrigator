@@ -7,23 +7,56 @@
 #include "wifi_ota.h"
 #include "../../sys_conf.h"
 #include <esp_http_server.h>
+#include "nvs.h"
+#include "nvs_flash.h"
+#include "esp_ota_ops.h"
 
-#define  FW_BUF_SIZE      5140 //5KB 
+#define FW_BUF_SIZE         5140 //5KB 
+#define BUFF_SIZE           1500
+#define TEXT_BUFFSIZE       1024
 
 typedef enum ota_status {
-  OTA_IDLE,
-  OTA_UPLOAD_START,
-  OTA_UPLOAD_COMPLETE,
-  OTA_FW_WRITE_START,
-  OTA_FW_WRITE_COMPLETE,
-  OTA_REBOOT,
+  OTA_FW_WAITING,
+  OTA_FW_UPLOADING,
+  OTA_FW_UPLOAD_COMPLETE,
+  OTA_REBOOTING,
   OTA_STATUS_NUM
 }ota_status_t;
+
+const char* ota_status_str[OTA_STATUS_NUM] = {
+  "Waiting",
+  "Uploading",
+  "Upload Complete",
+  "Rebooting",
+};
+
+typedef enum ota_state {
+  OTA_INIT,
+  OTA_PREPARE,
+  OTA_START,
+  OTA_RECVED,
+  OTA_FINISH,
+  OTA_STATE_NUM
+}ota_state_t;
+
+typedef struct ota_firm {
+    uint8_t             ota_num;
+    uint8_t             update_ota_num;
+    ota_state_t         state;
+    size_t              content_len;
+    size_t              read_bytes;
+    size_t              write_bytes;
+    size_t              ota_size;
+    size_t              ota_offset;
+    const char          *buf;
+    size_t              bytes;
+}ota_firm_t;
 
 extern char index_html_start[]                asm("_binary_index_html_start");
 extern char index_html_end[]                  asm("_binary_index_html_end");
 static httpd_handle_t   _server           = NULL;
-static ota_status_t     _ota_status       = OTA_IDLE;
+static ota_status_t     _status           = OTA_FW_WAITING;
+static const char*      _tag              = "WiFi OTA";
 
 static void run_ota_task(void* arg);
 static httpd_handle_t start_webserver(void);
@@ -33,23 +66,16 @@ static esp_err_t root_handler(httpd_req_t* req);
 static esp_err_t get_handler(httpd_req_t* req);
 static esp_err_t put_handler(httpd_req_t* req);
 static esp_err_t post_handler(httpd_req_t* req);
+
 static inline size_t index_html_size(void) { 
   ptrdiff_t bin_size = index_html_end - index_html_start;
   return (size_t) bin_size;
 }
-static const char* ota_status_str(const ota_status_t status) {
-  const char* str = "Unknown Status";
-  if(status < OTA_STATUS_NUM) return str; 
-  switch(status){
-    case OTA_IDLE: str = "Idle"; break;
-    case OTA_UPLOAD_START: str = "OTA FW Uploading"; break;
-    case OTA_UPLOAD_COMPLETE: str = "OTA FW Upload Completed"; break;
-    case OTA_FW_WRITE_START: str = "OTA FW being written to flash"; break;
-    case OTA_FW_WRITE_COMPLETE: str ="OTA FW written to flash"; break;
-    case OTA_REBOOT: str = "OTA Reboot started"; break;
-    default: return str;
-  }
-  return str;
+
+static inline int read_until(const char* buffer, char delim, int len) {
+  int i = 0;
+  while(buffer[i] != delim && i < len) ++i;
+  return i + 1;
 }
 
 void wifi_ota_start(void) {
@@ -63,6 +89,17 @@ void run_ota_task(void* arg) {
     printf("WiFi OTA: Starting Webserver\n");
     _server = start_webserver();
   }
+  esp_err_t                             err;
+  esp_ota_handle_t                      update_handle = 0;
+  const esp_partition_t*                update_partition = NULL;
+  const esp_partition_t*                configured = esp_ota_get_boot_partition();
+  const esp_partition_t*                running = esp_ota_get_running_partition();
+  if(configured != running) {
+    ESP_LOGW(_tag, "Configured OTA boot parition at offset 0x%08x, but running from offse 0x%08x",
+                configured->address, running->address);
+  }
+  ESP_LOGI(_tag, "Running partition type %d subtype %d (offset 0x%08x)",
+              running->type, running->subtype, running->address);
   ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, WIFI_EVENT_STA_DISCONNECTED, &disconnect_handler, &_server)); 
   for(;;) { 
     sys_delay(1);
@@ -82,16 +119,7 @@ esp_err_t root_handler(httpd_req_t* req) {
 
 esp_err_t get_handler(httpd_req_t* req) {
   char* buf;
-  size_t buf_len;
-  buf_len = httpd_req_get_hdr_value_len(req, "Host") + 1;
-  if(buf_len > 1) {
-    buf = malloc(buf_len);
-    if(httpd_req_get_hdr_value_str(req, "Host", buf, buf_len) == ESP_OK) {
-      printf("WiFI OTA: Found header --> host: %s\n", buf);
-    }
-    free(buf);
-  }
-  const char* resp = ota_status_str(_ota_status);
+  const char* resp = ota_status_str[_status];
   httpd_resp_send(req, resp, strlen(resp));
   return ESP_OK;
 } 
@@ -117,7 +145,7 @@ esp_err_t post_handler(httpd_req_t* req) {
   char *buf, *resp;
   const long int free_heap_size = esp_get_free_heap_size();
   printf("WiFi OTA: Incoming upload bin size (%d), heap (%lu)\n", remaining, free_heap_size);
-  if(free_heap_size < FW_BUF_SIZE)) {
+  if(free_heap_size < FW_BUF_SIZE) {
     resp = "Cannot allocate enough memory for FW upload";
     printf("%s Only %ld bytes available %d needed.\n", resp, free_heap_size, FW_BUF_SIZE);
     httpd_resp_send(req, resp, strlen(resp));
@@ -129,6 +157,7 @@ esp_err_t post_handler(httpd_req_t* req) {
     free(buf);
     return ESP_FAIL;
   }
+  _status = OTA_FW_UPLOADING;
   while(remaining > 0) {
     if((ret = httpd_req_recv(req, buf, remaining)) <= 0) {
       if(ret == HTTPD_SOCK_ERR_TIMEOUT) {
@@ -137,10 +166,15 @@ esp_err_t post_handler(httpd_req_t* req) {
       free(buf);
       return ESP_FAIL;
     }
+    // Send for OTA
+    printf("POST: Received %d Remaining %d\n", ret, remaining);
     remaining -= ret;
   }
-  httpd_resp_send(req, NULL, 0);
+  _status = OTA_FW_UPLOAD_COMPLETE;
   printf("WiFi OTA: FW Upload Complete\n");
+  httpd_resp_send(req, NULL, 0);
+  _status = OTA_REBOOTING;
+  // Send Reboot event
   free(buf);
   return ESP_OK;
 }
