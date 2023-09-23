@@ -1,13 +1,19 @@
-![Logo|100x100](wirrigator-logos.jpeg)
+![Logo|100x100](wirrigator.jpg)
 
 # Wirrigator
 
 Little IoT irrigation project based on Wemos-D1 mini board ($2 board)
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-![size](https://img.shields.io/github/repo-size/brinth/wirrigator)
-![contributers](https://img.shields.io/github/contributors/brinth/wirrigator)
-![forks](https://img.shields.io/github/forks/brinth/wirrigator)
+[![size](https://img.shields.io/github/repo-size/brinth/wirrigator)](https://github.com/brinth/wirrigator)
+[![lang](https://img.shields.io/github/languages/top/brinth/wirrigator)](https://github.com/brinth/wirrigator)
+[![commits](https://img.shields.io/github/commit-activity/t/brinth/wirrigator)](https://github.com/brinth/wirrigator)
+[![open issues](https://img.shields.io/github/issues-raw/brinth/wirrigator)](https://github.com/brinth/wirrigator)
+[![closed issues](https://img.shields.io/github/issues-closed/brinth/wirrigator)](https://github.com/brinth/wirrigator)
+[![pull request](https://img.shields.io/github/languages/top/brinth/wirrigator)](https://github.com/brinth/wirrigator)
+[![contributers](https://img.shields.io/github/contributors/brinth/wirrigator)](https://github.com/brinth/wirrigator)
+[![forks](https://img.shields.io/github/forks/brinth/wirrigator)](https://github.com/brinth/wirrigator)
+[![star](https://img.shields.io/github/stars/brinth/wirrigator)](https://github.com/brinth/wirrigator)
 
 
 ## Build

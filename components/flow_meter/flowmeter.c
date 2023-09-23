@@ -37,7 +37,7 @@ void flow_meter_start(void) {
 	xTaskCreate(run_flow_meter_task, "FlowMeter Task", 4000, NULL, PRIORITY_FLOW_METER, &_flow_task_handle);
 }
 
-void flow_meter_start(void) {
+void flow_meter_stop(void) {
 	vTaskDelete(&_flow_task_handle);
 }
 
