@@ -22,6 +22,7 @@ Requirements
 - [ESP8266-RTOS-SDK](https://docs.espressif.com/projects/esp8266-rtos-sdk/en/latest/get-started/index.html)
 - bash
 ```bash
+ ./prebuild.sh
   make flash monitor
 ```
     
