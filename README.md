@@ -1,22 +1,43 @@
-# AutoIrrigation
 
-Wemos Mini (ESP8266) Project for Automatic Irrigation of Home Garden
+![Logo](wirrigator-logos.png)
 
-## Component Required
-1. Wemos D1 Mini (ESP8266)
-2. 12V DC Solenoid Valve
-3. Flow Meter
-4. Power supply (as per the setup)
 
-## HLD
-- Wemos board operates the Solenoid Valve every day for 2 mins (which could be configured)
-    morning and evening
-- It uses the flow meter to control the Amount of water to be discharged and also to validate the 
-  Valve operations
-- It gets the Time online and updates every time on bootup
-- It should also connect to OpenHAB local server through MQTT for override
+# Wirrigator
 
-## LLD
-- Uses Solid State Relay for Solenoid operations
-- Uses NTP for Time Sync
-- Uses MQTT for OpenHAB communication
+Little IoT irrigation project based on Wemos-D1 mini board ($2 board)
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+
+
+## Build
+
+Requirements 
+- [ESP8266-RTOS-SDK](https://docs.espressif.com/projects/esp8266-rtos-sdk/en/latest/get-started/index.html)
+- bash
+```bash
+  make flash monitor
+```
+    
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+
+## Authors
+
+- [@brinth](https://www.github.com/brinth)
+
+
+## Contributing
+
+Contributions are always welcome!
+
+See `contributing.md` for ways to get started.
+
+Please adhere to this project's `code of conduct`.
+
+
+## Documentation
+
+[Documentation](https://linktodocumentation)
+
