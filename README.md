@@ -1,4 +1,4 @@
-![Logo|200x200](wirrigator-logos.jpeg)
+![Logo](wirrigator-logos.jpeg){height=400px width=500px}
 
 
 # Wirrigator
