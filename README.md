@@ -6,9 +6,9 @@
 Little IoT irrigation project based on Wemos-D1 mini board ($2 board)
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[size](https://img.shields.io/github/repo-size/brinth/wirrigator)
-[contributers](https://img.shields.io/github/contributors/brinth/wirrigator)
-[forks](https://img.shields.io/github/forks/brinth/wirrigator)
+![size](https://img.shields.io/github/repo-size/brinth/wirrigator)
+![contributers](https://img.shields.io/github/contributors/brinth/wirrigator)
+![forks](https://img.shields.io/github/forks/brinth/wirrigator)
 
 
 ## Build
