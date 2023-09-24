@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Irrigation Control OTA</title>
+    <title>Wirrigator</title>
     <style>
         /* CSS styles */
         body {
@@ -16,6 +16,14 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            text-align: center;
+        }
+        .logo img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
         }
         h2 {
             color: #333;
@@ -44,6 +52,10 @@
 </head>
 <body>
     <div class="container">
+        <div class="logo">
+            <!-- base64 Logo image will be embedded here during build -->
+            <img src="" alt="logo">
+        </div>
         <h2>Upload the Firmware</h2>
         <form id="uploadForm" enctype="multipart/form-data">
             <input type="file" id="fileInput" name="file">

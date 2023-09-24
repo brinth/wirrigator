@@ -1,4 +1,4 @@
-![Logo|100x100](wirrigator.jpg)
+![Logo|100x100](wirrigator_logo.jpg)
 
 # Wirrigator
 
@@ -12,6 +12,7 @@ Little IoT irrigation project based on Wemos-D1 mini board ($2 board)
 [![closed issues](https://img.shields.io/github/issues-closed/brinth/wirrigator)](https://github.com/brinth/wirrigator)
 [![pull request](https://img.shields.io/github/languages/top/brinth/wirrigator)](https://github.com/brinth/wirrigator)
 [![contributers](https://img.shields.io/github/contributors/brinth/wirrigator)](https://github.com/brinth/wirrigator)
+[![discord](https://img.shields.io/discord/1155244241874853939)](https://discord.gg/PtwaUKvFpX)
 [![forks](https://img.shields.io/github/forks/brinth/wirrigator)](https://github.com/brinth/wirrigator)
 [![star](https://img.shields.io/github/stars/brinth/wirrigator)](https://github.com/brinth/wirrigator)
 
@@ -21,6 +22,7 @@ Little IoT irrigation project based on Wemos-D1 mini board ($2 board)
 Requirements 
 - [ESP8266-RTOS-SDK](https://docs.espressif.com/projects/esp8266-rtos-sdk/en/latest/get-started/index.html)
 - bash
+- python
 ```bash
  ./prebuild.sh
   make flash monitor
