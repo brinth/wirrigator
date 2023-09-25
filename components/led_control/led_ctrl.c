@@ -51,10 +51,10 @@ void run_led_task(void* arg) {
 			gpio_set_level(_cfg.green, true);
 			if(bits & EVENT_BIT(OTA_UPGRADE_COMPLETE)) gpio_set_level(_cfg.yellow, false);
 		}
-		if(bits & (EVENT_BIT(VALVE_OPENED) | EVENT_BIT(OTA_UPGRADE_IN_PROGRESS))) {
+		if(bits & (EVENT_BIT(VALVE_OPENED) | EVENT_BIT(OTA_UPGRADE_START))) {
 			gpio_set_level(_cfg.yellow, true);
 		}
-		if(bits & (EVENT_BIT(WIFI_CONNECTION_FAILURE) | EVENT_BIT(VALVE_CLOSED) | EVENT_BIT(FLOW_STOPPED))) {
+		if(bits & (EVENT_BIT(WIFI_CONNECTION_FAILURE) | EVENT_BIT(VALVE_CLOSED) | EVENT_BIT(FLOW_STOPPED) | EVENT_BIT(OTA_UPGRADE_ERROR))) {
 			gpio_set_level(_cfg.red, true);
 			if(bits & EVENT_BIT(FLOW_STOPPED)) gpio_set_level(_cfg.green, false);
 		}

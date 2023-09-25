@@ -70,7 +70,7 @@ enum wifi_sta_events {
 
 enum ota_events {
 	OTA_UPGRADE_START = OTA_EVENT_BASE,
-	OTA_UPGRADE_IN_PROGRESS,
+	OTA_UPGRADE_ERROR,
 	OTA_UPGRADE_COMPLETE,
 };
 

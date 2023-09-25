@@ -75,11 +75,11 @@ bool	wifi_sta_connect(void) {
 	vEventGroupDelete(_wifi_events);
 	if(ret) {
 		_status = STA_CONNECTED;
-		DPRINTF("Connected Event 0x%x\n", EVENT_BIT(WIFI_CONNECTION_SUCCESS));
+//		DPRINTF("Connected Event 0x%x\n", EVENT_BIT(WIFI_CONNECTION_SUCCESS));
 		xEventGroupSetBits(_sys_events, EVENT_BIT(WIFI_CONNECTION_SUCCESS));
 	} else {
 		_status = STA_DISCONNECTED;
-		DPRINTF("Disconnected Event 0x%x\n", EVENT_BIT(WIFI_CONNECTION_FAILURE));
+//		DPRINTF("Disconnected Event 0x%x\n", EVENT_BIT(WIFI_CONNECTION_FAILURE));
 		xEventGroupSetBits(_sys_events, EVENT_BIT(WIFI_CONNECTION_FAILURE));
 	}
 	return ret;

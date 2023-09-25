@@ -10,10 +10,12 @@
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "esp_ota_ops.h"
+#include "cJSON.h"
 
 typedef enum ota_status {
   OTA_FW_WAITING,
   OTA_FW_UPLOADING,
+  OTA_FW_UPLOAD_ERROR,
   OTA_FW_UPLOAD_COMPLETE,
   OTA_REBOOTING,
   OTA_STATUS_NUM
@@ -29,6 +31,7 @@ const char* ota_status_str[OTA_STATUS_NUM] = {
 extern char index_html_start[]                asm("_binary_index_html_start");
 extern char index_html_end[]                  asm("_binary_index_html_end");
 static httpd_handle_t   _server           = NULL;
+static unsigned         _upload_progress  = 0;
 static ota_status_t     _status           = OTA_FW_WAITING;
 static const char*      _tag              = "WiFi OTA";
 
@@ -40,6 +43,7 @@ static esp_err_t root_handler(httpd_req_t* req);
 static esp_err_t get_handler(httpd_req_t* req);
 static esp_err_t put_handler(httpd_req_t* req);
 static esp_err_t post_handler(httpd_req_t* req);
+static void update_status(const ota_status_t status);
 
 httpd_uri_t root_uri = {
   .uri      = "/",
@@ -88,8 +92,17 @@ esp_err_t root_handler(httpd_req_t* req) {
 }
 
 esp_err_t get_handler(httpd_req_t* req) {
-  const char* resp = ota_status_str[_status];
+  char resp[200];
+  char buf[10];
+  cJSON* root = cJSON_CreateObject();
+  cJSON* status = cJSON_CreateString(ota_status_str[_status]);
+  itoa(_upload_progress, buf, sizeof(buf));
+  cJSON* progress = cJSON_CreateString(buf);
+  cJSON_AddItemToObject(root, "status", status);
+  cJSON_AddItemToObject(root, "progress", progress);
+  cJSON_PrintPreallocated(root, resp, sizeof(resp), false);
   httpd_resp_send(req, resp, strlen(resp));
+  cJSON_Delete(root);
   return ESP_OK;
 } 
 
@@ -135,7 +148,7 @@ esp_err_t post_handler(httpd_req_t* req) {
   }
   ESP_LOGI(_tag, "Writing to parition subtype %d at offset 0x%x", update_partition->subtype, update_partition->address);
   err = esp_ota_begin(update_partition, OTA_SIZE_UNKNOWN, &update_handle);
-  _status = OTA_FW_UPLOADING;
+  update_status(OTA_FW_UPLOADING);
   httpd_unregister_uri(_server, "/upload");
   while(remaining > 0) {
     if((ret = httpd_req_recv(req, buf, remaining)) <= 0) {
@@ -148,21 +161,25 @@ esp_err_t post_handler(httpd_req_t* req) {
       ESP_LOGE(_tag, "Error: buffer cannot hold payload ret=%d\n", ret);
       goto post_fail;
     }
+    /*
     err = esp_ota_write(update_handle, (const void*) buf, ret);
     if(err != ESP_OK) {
       ESP_LOGE(_tag, "Error: esp_ota_write failed! err=0x%x", err);
       goto post_fail;
     }
+    */
+    httpd_resp_send_chunk(req, buf, ret);
     remaining -= ret;
+    _upload_progress = ((req->content_len - remaining) / req->content_len) * 100;
   }
   if(esp_ota_end(update_handle) != ESP_OK) {
     ESP_LOGE(_tag, "esp_ota_end failed!");
     goto post_fail;
   }
-  _status = OTA_FW_UPLOAD_COMPLETE;
+  update_status(OTA_FW_UPLOAD_COMPLETE);
   printf("WiFi OTA: FW Upload Complete\n");
   httpd_resp_send(req, NULL, 0);
-  _status = OTA_REBOOTING;
+  update_status(OTA_REBOOTING);
   if((err = esp_ota_set_boot_partition(update_partition)) != ESP_OK) {
     ESP_LOGE(_tag, "esp_ota_set_boot_parition failed! err=0x%x", err);
     goto post_fail;
@@ -172,6 +189,7 @@ esp_err_t post_handler(httpd_req_t* req) {
   esp_restart();
   return ESP_OK;
 post_fail:
+  update_status(OTA_FW_UPLOAD_ERROR);
   httpd_register_uri_handler(_server, &post_uri);
   free(buf);
   return ESP_FAIL;
@@ -223,6 +241,12 @@ void disconnect_handler(void* arg, esp_event_base_t event_base, int32_t event_id
     stop_webserver(*server);
     *server = NULL;
   }
+}
+
+void update_status(const ota_status_t status) {
+  _status = status;
+  xEventGroupClearBits(_sys_events, EVENT_BIT(status));
+  xEventGroupSetBits(_sys_events, EVENT_BIT(status));
 }
 
 void wifi_ota_start(void) {
