@@ -1,4 +1,4 @@
-![Logo|100x100](wirrigator_logo.jpg)
+![Logo|100x100](./docs/images/wirrigator_logo.jpg)
 
 # Wirrigator
 
@@ -20,9 +20,15 @@ Little IoT irrigation project based on Wemos-D1 mini board ($2 board)
 ## Build
 
 Requirements 
-- [ESP8266-RTOS-SDK](https://docs.espressif.com/projects/esp8266-rtos-sdk/en/latest/get-started/index.html)
-- bash
-- python
+- Hardware
+    - [Wemos D1 mini](https://www.wemos.cc/en/latest/d1/d1_mini.html)
+    - 12V Solenoid Valve
+    - Hall Effect Flowmeter
+    - [PCB](https://oshwlab.com/brinth/wemos-irrigation-controller_copy#P3)
+- Software
+    - [ESP8266-RTOS-SDK](https://docs.espressif.com/projects/esp8266-rtos-sdk/en/latest/get-started/index.html)
+    - bash
+    - python
 ```bash
  ./prebuild.sh
   make flash monitor
@@ -49,5 +55,8 @@ Please adhere to this project's `code of conduct`.
 
 ## Documentation
 
-[Documentation](https://linktodocumentation)
+[SW-Wiki](./docs/software/html/index.html)
 
+## Contact
+- [Discord](https://discord.gg/PtwaUKvFpX)
+- [e-mail](brinthkhanna@yahoo.com)
