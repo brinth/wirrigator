@@ -55,7 +55,7 @@ Please adhere to this project's `code of conduct`.
 
 ## Documentation
 
-[SW-Wiki](./docs/software/html/index.html)
+[Software](https://brinth.github.io/wirrigator/docs/software/html/annotated.html)
 
 ## Contact
 - [Discord](https://discord.gg/PtwaUKvFpX)
