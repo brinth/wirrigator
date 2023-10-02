@@ -1,0 +1,58 @@
+\hypertarget{flowmeter_8h_source}{}\doxysection{flowmeter.\+h}
+\label{flowmeter_8h_source}\index{components/flow\_meter/flowmeter.h@{components/flow\_meter/flowmeter.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{/*}}
+\DoxyCodeLine{2 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{3 \textcolor{comment}{ *}}
+\DoxyCodeLine{4 \textcolor{comment}{ *       Filename:  flowmeter.h}}
+\DoxyCodeLine{5 \textcolor{comment}{ *}}
+\DoxyCodeLine{6 \textcolor{comment}{ *    Description:  Flow Meter component }}
+\DoxyCodeLine{7 \textcolor{comment}{ *}}
+\DoxyCodeLine{8 \textcolor{comment}{ *        Version:  1.0}}
+\DoxyCodeLine{9 \textcolor{comment}{ *        Created:  01/07/23 05:01:09 PM IST}}
+\DoxyCodeLine{10 \textcolor{comment}{ *       Revision:  none}}
+\DoxyCodeLine{11 \textcolor{comment}{ *       Compiler:  xtensa-\/l106-\/elf-\/gcc}}
+\DoxyCodeLine{12 \textcolor{comment}{ *}}
+\DoxyCodeLine{13 \textcolor{comment}{ *         Author:  Brinth Khanna(brinthtest@gmail.com), }}
+\DoxyCodeLine{14 \textcolor{comment}{ *}}
+\DoxyCodeLine{15 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{16 \textcolor{comment}{ */}}
+\DoxyCodeLine{17 \textcolor{preprocessor}{\#include <stdbool.h>}}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#ifndef \_\_FLOWMETER\_H\_}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#define \_\_FLOWMETER\_H\_}}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#ifdef \_\_cplusplus}}
+\DoxyCodeLine{23 \textcolor{keyword}{extern} \textcolor{stringliteral}{"{}C"{}} \{}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{structflow__meter__conf}{flow\_meter\_conf}} \{}
+\DoxyCodeLine{27     \textcolor{keywordtype}{unsigned} pin;}
+\DoxyCodeLine{28     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} ppl;}
+\DoxyCodeLine{29 \}\mbox{\hyperlink{structflow__meter__conf}{flow\_meter\_conf\_t}};}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31 \textcolor{keyword}{typedef} \textcolor{keyword}{enum} flow\_meter\_state \{}
+\DoxyCodeLine{32     NO\_FLOW\_DETECTED,}
+\DoxyCodeLine{33     FLOW\_DETECTED,}
+\DoxyCodeLine{34 \}flow\_meter\_state\_t;}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36 \textcolor{keywordtype}{bool} flow\_meter\_init(\textcolor{keyword}{const} \mbox{\hyperlink{structflow__meter__conf}{flow\_meter\_conf\_t}} *cfg);}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38 \textcolor{keywordtype}{void} flow\_meter\_start(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40 \textcolor{keywordtype}{void} flow\_meter\_stop(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42 flow\_meter\_state\_t flow\_meter\_get\_state(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{keywordtype}{long} flow\_meter\_get\_discharge(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46 \textcolor{keywordtype}{long} flow\_meter\_get\_volume(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48 \textcolor{preprocessor}{\#ifdef \_\_cplusplus}}
+\DoxyCodeLine{49 \}}
+\DoxyCodeLine{50 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_\_FLOWMETER\_H\_}}
+
+\end{DoxyCode}

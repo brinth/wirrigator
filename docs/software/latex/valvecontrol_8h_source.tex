@@ -1,0 +1,96 @@
+\hypertarget{valvecontrol_8h_source}{}\doxysection{valvecontrol.\+h}
+\label{valvecontrol_8h_source}\index{components/valve\_control/valvecontrol.h@{components/valve\_control/valvecontrol.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{/*}}
+\DoxyCodeLine{2 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{3 \textcolor{comment}{ *}}
+\DoxyCodeLine{4 \textcolor{comment}{ *       Filename:  valvecontrol.h}}
+\DoxyCodeLine{5 \textcolor{comment}{ *}}
+\DoxyCodeLine{6 \textcolor{comment}{ *    Description: Solenoid valve control operation Module }}
+\DoxyCodeLine{7 \textcolor{comment}{ *}}
+\DoxyCodeLine{8 \textcolor{comment}{ *        Version:  1.0}}
+\DoxyCodeLine{9 \textcolor{comment}{ *        Created:  01/07/23 01:08:36 AM IST}}
+\DoxyCodeLine{10 \textcolor{comment}{ *       Revision:  none}}
+\DoxyCodeLine{11 \textcolor{comment}{ *       Compiler:  xtensa-\/lx106-\/elf-\/gcc}}
+\DoxyCodeLine{12 \textcolor{comment}{ *}}
+\DoxyCodeLine{13 \textcolor{comment}{ *         Author:  Brinth Khanna(brinthtest@gmail.com)}}
+\DoxyCodeLine{14 \textcolor{comment}{ *}}
+\DoxyCodeLine{15 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{16 \textcolor{comment}{ */}}
+\DoxyCodeLine{17 \textcolor{preprocessor}{\#ifndef \_\_VALVECONTROL\_H}}
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#define \_\_VALVECONTROL\_H}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#ifdef \_\_cplusplus}}
+\DoxyCodeLine{21 \textcolor{keyword}{extern} \textcolor{stringliteral}{"{}C"{}} \{}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#include "{}../../sys\_conf.h"{}}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \textcolor{keyword}{typedef} \textcolor{keyword}{enum} valve\_logic \{}
+\DoxyCodeLine{27     VALVE\_ACTIVE\_LOW,}
+\DoxyCodeLine{28     VALVE\_ACTIVE\_HIGH}
+\DoxyCodeLine{29 \} valve\_logic\_e;}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{structvalve__conf}{valve\_conf}} \{}
+\DoxyCodeLine{32     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{short} pin;}
+\DoxyCodeLine{33     valve\_logic\_e logic; }
+\DoxyCodeLine{34 \} \mbox{\hyperlink{structvalve__conf}{valve\_conf\_t}};}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36 \textcolor{keyword}{typedef} void (*valve\_ops\_cb) (\textcolor{keywordtype}{int} *ret);}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{structvalve__ops}{valve\_ops}} \{}
+\DoxyCodeLine{39     valve\_ops\_cb open;}
+\DoxyCodeLine{40     valve\_ops\_cb close;}
+\DoxyCodeLine{41 \} \mbox{\hyperlink{structvalve__ops}{valve\_ops\_t}};}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 \textcolor{comment}{/* }}
+\DoxyCodeLine{44 \textcolor{comment}{ * ===  FUNCTION  ======================================================================}}
+\DoxyCodeLine{45 \textcolor{comment}{ *         Name:  valve\_init}}
+\DoxyCodeLine{46 \textcolor{comment}{ *  Description: Sets the GPIO and other SW conf and initializes the Hardware}}
+\DoxyCodeLine{47 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{48 \textcolor{comment}{ */}}
+\DoxyCodeLine{49 \textcolor{keywordtype}{bool} valve\_init(\textcolor{keyword}{const} \mbox{\hyperlink{structvalve__conf}{valve\_conf\_t}} *conf);}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51 \textcolor{comment}{/* }}
+\DoxyCodeLine{52 \textcolor{comment}{ * ===  FUNCTION  ======================================================================}}
+\DoxyCodeLine{53 \textcolor{comment}{ *         Name:  valve\_open}}
+\DoxyCodeLine{54 \textcolor{comment}{ *  Description: Asserts configured GPIO to open valve}}
+\DoxyCodeLine{55 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{56 \textcolor{comment}{ */}}
+\DoxyCodeLine{57 \textcolor{keywordtype}{bool} valve\_open(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59 \textcolor{comment}{/* }}
+\DoxyCodeLine{60 \textcolor{comment}{ * ===  FUNCTION  ======================================================================}}
+\DoxyCodeLine{61 \textcolor{comment}{ *         Name:  valve\_close}}
+\DoxyCodeLine{62 \textcolor{comment}{ *  Description: Asserts configured GPIO to close valve }}
+\DoxyCodeLine{63 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{64 \textcolor{comment}{ */}}
+\DoxyCodeLine{65 \textcolor{keywordtype}{bool} valve\_close(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67 \textcolor{comment}{/* }}
+\DoxyCodeLine{68 \textcolor{comment}{ * ===  FUNCTION  ======================================================================}}
+\DoxyCodeLine{69 \textcolor{comment}{ *         Name:  valve\_open\_ac}}
+\DoxyCodeLine{70 \textcolor{comment}{ *  Description: Asserts configured GPIO to open valve waits for given seconds}}
+\DoxyCodeLine{71 \textcolor{comment}{ *              and auto closes the valve }}
+\DoxyCodeLine{72 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{73 \textcolor{comment}{ */}}
+\DoxyCodeLine{74 \textcolor{keywordtype}{bool} valve\_open\_ac(\textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} sec);}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77 \textcolor{comment}{/* }}
+\DoxyCodeLine{78 \textcolor{comment}{ * ===  FUNCTION  ======================================================================}}
+\DoxyCodeLine{79 \textcolor{comment}{ *         Name:  valve\_probe}}
+\DoxyCodeLine{80 \textcolor{comment}{ *  Description: Register callbacks to be invoked on any event }}
+\DoxyCodeLine{81 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{82 \textcolor{comment}{ */}}
+\DoxyCodeLine{83 \textcolor{keywordtype}{bool} valve\_probe(\textcolor{keyword}{const} \mbox{\hyperlink{structvalve__ops}{valve\_ops\_t}} *ops);}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86 \textcolor{preprocessor}{\#ifdef \_\_cplusplus}}
+\DoxyCodeLine{87 \}}
+\DoxyCodeLine{88 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_\_VALVECONTROL\_H}}
+
+\end{DoxyCode}

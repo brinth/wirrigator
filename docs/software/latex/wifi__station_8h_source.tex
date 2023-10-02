@@ -1,0 +1,55 @@
+\hypertarget{wifi__station_8h_source}{}\doxysection{wifi\+\_\+station.\+h}
+\label{wifi__station_8h_source}\index{components/wifi\_station/wifi\_station.h@{components/wifi\_station/wifi\_station.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{/*}}
+\DoxyCodeLine{2 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{3 \textcolor{comment}{ *}}
+\DoxyCodeLine{4 \textcolor{comment}{ *       Filename:  wifi\_station.h}}
+\DoxyCodeLine{5 \textcolor{comment}{ *}}
+\DoxyCodeLine{6 \textcolor{comment}{ *    Description:  Connect to Wifi AP as Station }}
+\DoxyCodeLine{7 \textcolor{comment}{ *}}
+\DoxyCodeLine{8 \textcolor{comment}{ *        Version:  1.0}}
+\DoxyCodeLine{9 \textcolor{comment}{ *        Created:  30/07/23 01:54:43 PM IST}}
+\DoxyCodeLine{10 \textcolor{comment}{ *       Revision:  none}}
+\DoxyCodeLine{11 \textcolor{comment}{ *       Compiler:  xtensa-\/l106-\/elf-\/gcc}}
+\DoxyCodeLine{12 \textcolor{comment}{ *}}
+\DoxyCodeLine{13 \textcolor{comment}{ *         Author:  Brinth Khanna }}
+\DoxyCodeLine{14 \textcolor{comment}{ *}}
+\DoxyCodeLine{15 \textcolor{comment}{ * =====================================================================================}}
+\DoxyCodeLine{16 \textcolor{comment}{ */}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#ifndef \_\_WIFI\_STATION\_H\_\_}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#define \_\_WIFI\_STATION\_H\_\_}}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{structwifi__sta__conf}{wifi\_sta\_conf}} \{}
+\DoxyCodeLine{22     \textcolor{keyword}{const} \textcolor{keywordtype}{char}* ssid;}
+\DoxyCodeLine{23     \textcolor{keyword}{const} \textcolor{keywordtype}{char}* pass;}
+\DoxyCodeLine{24     \textcolor{keywordtype}{unsigned}    retry;}
+\DoxyCodeLine{25 \}\mbox{\hyperlink{structwifi__sta__conf}{wifi\_sta\_conf\_t}};}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \textcolor{keyword}{typedef} \textcolor{keyword}{enum} wifi\_sta\_status \{}
+\DoxyCodeLine{28     STA\_DISCONNECTED,}
+\DoxyCodeLine{29     STA\_CONNECTING,}
+\DoxyCodeLine{30     STA\_CONNECTED}
+\DoxyCodeLine{31 \}wifi\_sta\_status\_t;}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#ifdef \_\_cplusplus}}
+\DoxyCodeLine{34 \textcolor{keyword}{extern} \textcolor{stringliteral}{"{}C"{}} \{}
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#endif }}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{keywordtype}{bool}                        wifi\_sta\_init(\textcolor{keyword}{const} \mbox{\hyperlink{structwifi__sta__conf}{wifi\_sta\_conf\_t}} *cfg);}
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39 \textcolor{keywordtype}{bool}                        wifi\_sta\_connect(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 \textcolor{keywordtype}{bool}                        wifi\_sta\_disconnect(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 wifi\_sta\_status\_t           wifi\_sta\_status(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45 \textcolor{preprocessor}{\#ifdef \_\_cplusplus}}
+\DoxyCodeLine{46 \}}
+\DoxyCodeLine{47 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//\_\_WIFI\_STATION\_H\_\_}}
+
+\end{DoxyCode}

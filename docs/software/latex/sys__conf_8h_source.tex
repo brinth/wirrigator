@@ -1,0 +1,102 @@
+\hypertarget{sys__conf_8h_source}{}\doxysection{sys\+\_\+conf.\+h}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#ifndef \_\_SYS\_CONF\_H\_\_}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#define \_\_SYS\_CONF\_H\_\_}}
+\DoxyCodeLine{3 }
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <stdio.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <stdlib.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <stdint.h>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <stdbool.h>}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <string.h>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}freertos/FreeRTOS.h"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}freertos/task.h"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}freertos/event\_groups.h"{}}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}freertos/queue.h"{}}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}esp\_system.h"{}}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}esp\_event.h"{}}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#include "{}esp\_log.h"{}}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#include "{}esp\_err.h"{}}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{comment}{// Comment out the below line to disable all debug prints}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#define DEBUG 1}}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#if defined(DEBUG)}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#define DPRINTF(X...) printf(X)}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#define DPRINTF(X...)}}
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{26 \textcolor{preprocessor}{\#define EVENT\_BIT(pos)                  (1U << pos)}}
+\DoxyCodeLine{27 \textcolor{preprocessor}{\#define MAX(a, b) ((a) > (b) ? (a) : (b))}}
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#define MIN(a, b) ((a) < (b) ? (a) : (b))}}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#define STARTUP\_DELAY                   0}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32 \textcolor{preprocessor}{\#define SNTP\_SERVER\_NAME\_0              "{}pool.ntp.org"{}}}
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#define SNTP\_SERVER\_NAME\_1              "{}asia.pool.ntp.org"{}}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#define SNTP\_SERVER\_NAME\_2              "{}in.pool.ntp.org"{}}}
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#define SNTP\_RETRY\_COUNT                5}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#define IRRIGATION\_TIME\_SEC             5 }\textcolor{comment}{// 3 minutes}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#define IRRIGATION\_VOLUME\_L             10  }\textcolor{comment}{// 10 litre}}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#define MQTT\_BROKER\_IP                  "{}192.168.1.10"{}}}
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#define MQTT\_BROKER\_PORT                1886}}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 \textcolor{keyword}{enum} system\_pin\_desc \{}
+\DoxyCodeLine{44     VALVE\_PIN = 5,}
+\DoxyCodeLine{45     FLOW\_METER\_PIN = 16,}
+\DoxyCodeLine{46     GREEN\_LED\_PIN = 14,}
+\DoxyCodeLine{47     YELLOW\_LED\_PIN = 12,}
+\DoxyCodeLine{48     RED\_LED\_PIN = 13,}
+\DoxyCodeLine{49 \};}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51 \textcolor{keyword}{enum} operation\_priority \{}
+\DoxyCodeLine{52     PRIORITY\_OTA = 10,}
+\DoxyCodeLine{53     PRIORITY\_FLOW\_METER = 20,}
+\DoxyCodeLine{54     PRIORITY\_LED\_CTRL = 30,}
+\DoxyCodeLine{55 \};}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57 \textcolor{keyword}{enum} event\_bits\_base \{}
+\DoxyCodeLine{58     WIFI\_EVENT\_BASE = 0,}
+\DoxyCodeLine{59     OTA\_EVENT\_BASE = 8,}
+\DoxyCodeLine{60     VALVE\_EVENT\_BASE = 16,}
+\DoxyCodeLine{61     FLOW\_EVENT\_BASE = 20,}
+\DoxyCodeLine{62     MISC\_EVENT\_BASE = 24,}
+\DoxyCodeLine{63 \};}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65 \textcolor{keyword}{enum} wifi\_sta\_events \{}
+\DoxyCodeLine{66     WIFI\_CONNECTION\_FAILURE = WIFI\_EVENT\_BASE,}
+\DoxyCodeLine{67     WIFI\_CONNECTION\_CONNECTING,}
+\DoxyCodeLine{68     WIFI\_CONNECTION\_SUCCESS,}
+\DoxyCodeLine{69 \};}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71 \textcolor{keyword}{enum} ota\_events \{}
+\DoxyCodeLine{72     OTA\_UPGRADE\_START = OTA\_EVENT\_BASE,}
+\DoxyCodeLine{73     OTA\_UPGRADE\_ERROR,}
+\DoxyCodeLine{74     OTA\_UPGRADE\_COMPLETE,}
+\DoxyCodeLine{75 \};}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77 \textcolor{keyword}{enum} valve\_events \{}
+\DoxyCodeLine{78     VALVE\_CLOSED = VALVE\_EVENT\_BASE,}
+\DoxyCodeLine{79     VALVE\_OPENED,}
+\DoxyCodeLine{80 \};}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82 \textcolor{keyword}{enum} flow\_events \{}
+\DoxyCodeLine{83     FLOW\_STOPPED = FLOW\_EVENT\_BASE,}
+\DoxyCodeLine{84     FLOW\_STARTED,}
+\DoxyCodeLine{85 \};}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{87 \textcolor{keyword}{extern} EventGroupHandle\_t               \_sys\_events;}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} sys\_delay\_msec(uint16\_t delay\_ms) \{}
+\DoxyCodeLine{90     vTaskDelay(delay\_ms / portTICK\_PERIOD\_MS);}
+\DoxyCodeLine{91 \}}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} sys\_delay(uint16\_t delay) \{}
+\DoxyCodeLine{94     vTaskDelay((delay * 1000) / portTICK\_PERIOD\_MS);}
+\DoxyCodeLine{95 \}}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{97 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//\_\_SYS\_CONF\_H\_\_}}
+
+\end{DoxyCode}
