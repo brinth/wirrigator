@@ -20,7 +20,7 @@ jobs:
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1.9.5
       with:
-        doxyfile-path: ".docs/software/Doxyfile"
+        doxyfile-path: "docs/software/Doxyfile"
         working-directory: "."
 
     - name: Deploy
