@@ -9,6 +9,16 @@
 extern "C" {
 #endif
 
+/* * @file
+ * @brief This is the entry point component
+ */
+
+/* *
+ * @brief Entry Point function
+ *
+ * Gets Instance of System::Manager class (which is Irrigation Controller)
+ * Initializes it and starts Service loop
+ */
 void app_main(void) {
 	printf("Starting System...\n");	
 	for(uint8_t i = STARTUP_DELAY; i > 0; --i) { 

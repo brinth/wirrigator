@@ -1,8 +1,5 @@
-/*
- * wifi_ota.c
- *
- *  Created on: 06-Sep-2023
- *      Author: bkhanna
+/* * @file
+ * @brief Handles FOTA (Firmware Over the Air) update using HTTP Webserver & WiFi Stack
  */
 #include "wifi_ota.h"
 #include "../../sys_conf.h"
