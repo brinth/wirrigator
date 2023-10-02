@@ -1,0 +1,32 @@
+name: Generate and Host Docs
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - realease/*
+      - feature/*
+      - bugfix/*
+      - hotfix/*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Doxygen Action
+      uses: mattnotmitt/doxygen-action@v1.1.0
+      with:
+        doxyfile-path: ".docs/software/Doxyfile"
+        working-directory: "."
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ sectrets.GITHUB_TOKEN }}
+        publish_dir: ./html
+      
+  
