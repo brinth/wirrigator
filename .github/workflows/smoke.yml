@@ -28,7 +28,7 @@ jobs:
       - name: Creating secret.h
         working-directory: /project
         run: |
-          cat << EOF >> secret.h                                                                                                                                                                  ─╯
+          cat << EOF >> secret.h
           #ifndef __SECRET_H__
           #define __SECRET_H__
           #define CONFIG_WIFI_SSID "Fool"
