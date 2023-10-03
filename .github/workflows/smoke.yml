@@ -13,10 +13,11 @@ on:
 
 jobs:
   smoke:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     container:
       image: brinth/esp8266_rtos_sdk:main
+      options: --rm -it
       volumes:
         - ${{ github.workspace }}:/project
 
