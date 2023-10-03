@@ -17,7 +17,6 @@ jobs:
 
     container:
       image: brinth/esp8266_rtos_sdk:main
-      options: --rm --it
       volumes:
         - ${{ github.workspace }}:/project
 
