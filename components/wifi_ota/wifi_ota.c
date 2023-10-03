@@ -242,8 +242,7 @@ void disconnect_handler(void* arg, esp_event_base_t event_base, int32_t event_id
 
 void update_status(const ota_status_t status) {
   _status = status;
-  xEventGroupClearBits(_sys_events, EVENT_BIT(status));
-  xEventGroupSetBits(_sys_events, EVENT_BIT(status));
+  xEventGroupSetBits(_sys_events, EVENT_BIT(status)); // NOTE: Bits are not cleared as the LED process will clear it
 }
 
 void wifi_ota_start(void) {

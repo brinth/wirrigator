@@ -28,7 +28,8 @@ Requirements
 - Software
     - [ESP8266-RTOS-SDK](https://docs.espressif.com/projects/esp8266-rtos-sdk/en/latest/get-started/index.html)
     - bash
-    - python
+    - python (version 2.7)
+    - doxygen
 > NOTE: Consider using Dockerized ESP8266_RTOS_SDK for running your project [repo](https://github.com/brinth/ESP8266_RTOS_SDK_Docker)
 ```bash
  ./prebuild.sh
