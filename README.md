@@ -15,7 +15,8 @@ Little IoT irrigation project based on Wemos-D1 mini board ($2 board)
 [![discord](https://img.shields.io/discord/1155244241874853939)](https://discord.gg/PtwaUKvFpX)
 [![forks](https://img.shields.io/github/forks/brinth/wirrigator)](https://github.com/brinth/wirrigator)
 [![star](https://img.shields.io/github/stars/brinth/wirrigator)](https://github.com/brinth/wirrigator)
-
+[![Smoke test for FW Build](https://github.com/brinth/wirrigator/actions/workflows/smoke.yml/badge.svg)](https://github.com/brinth/wirrigator/actions/workflows/smoke.yml)
+[![Generate and Host Docs](https://github.com/brinth/wirrigator/actions/workflows/docs.yml/badge.svg)](https://github.com/brinth/wirrigator/actions/workflows/docs.yml)
 
 ## Build
 
