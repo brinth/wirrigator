@@ -25,11 +25,22 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Build Smoke Test
+      - name: Creating secret.h
+        working-directory: /project
+        run: |
+          cat << EOF >> secret.h                                                                                                                                                                  ─╯
+          #ifndef __SECRET_H__
+          #define __SECRET_H__
+          #define CONFIG_WIFI_SSID "Fool"
+          #define CONFIG_WIFI_PASS "ing you"
+          #endif
+          EOF
+
+      - name: Running Make 
         working-directory: /project
         run: make
 
-      - name: Print Result
+      - name: Check Result
         working-directory: /project
         run: |
           if [ $? -eq 0 ]; then
