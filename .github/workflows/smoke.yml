@@ -17,7 +17,7 @@ jobs:
 
     container:
       image: brinth/esp8266_rtos_sdk:main
-      options: --rm -it
+      options: --rm
       volumes:
         - ${{ github.workspace }}:/project
 
@@ -35,16 +35,4 @@ jobs:
           #define CONFIG_WIFI_PASS "ing you"
           #endif
           EOF
-
-      - name: Running Make 
-        working-directory: /project
-        run: make
-
-      - name: Check Result
-        working-directory: /project
-        run: |
-          if [ $? -eq 0 ]; then
-            echo "Build Successful"
-          else
-            echo "Build Broken"
-          fi
+          make && echo "Build Success" || echo "Build Broken"
