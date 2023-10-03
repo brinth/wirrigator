@@ -10,7 +10,9 @@ Before you start contributing, please read and follow these guidelines to ensure
   - [Reporting Bugs](#reporting-bugs)
   - [Suggesting Enhancements](#suggesting-enhancements)
   - [Code Contribution](#code-contribution)
+  - [Documentation](#documentation)
 - [Development Setup](#development-setup)
+- [Branch usage](#branch-usage)
 - [License](#license)
 
 ## Code of Conduct
@@ -56,9 +58,26 @@ We encourage contributions from the community. To contribute code:
 
 6. Once your PR is approved, it will be merged into the main branch, and your contribution will be acknowledged.
 
+### Documentation
+
+1. Documentation is integrated to the source code using Doxygen
+
+2. When writing new class, function or while creating new file adhere to Doxygen commenting format
+
+3. Generate the docs manually using doxygen command which populates html & latex file under docs/software folder
+
+4. Github Workflow is already set to publish the documents to github.io
+
 ## Development Setup
 
 If you want to set up the project locally for development, please follow the instructions in the [README](README.md) or refer to the project's documentation.
+
+## Branch Usage
+1. Use `feature/*` branch name prefix for any feature development
+2. Use `release/*` branch for releasing latest stable FW, also tag the commit used to build with version number (v.#.# Major number & Minor number)
+3. Use `docs/*` feature for updating docs/ folder using doxygen (NOTE: this is important as github workflows expect this branch to handle all docs folder update)
+4. Use `bugfix/*` branch for fixing any bugs or issues
+5. Use `hotfix/*` branch for any quick bugfix on top of release branch
 
 ## License
 

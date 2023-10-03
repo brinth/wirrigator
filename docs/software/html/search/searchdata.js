@@ -1,8 +1,8 @@
 var indexSectionsWithContent =
 {
-  0: "filmrvw",
+  0: "filmvw",
   1: "filmvw",
-  2: "r"
+  2: "w"
 };
 
 var indexSectionNames =

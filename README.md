@@ -29,11 +29,12 @@ Requirements
     - [ESP8266-RTOS-SDK](https://docs.espressif.com/projects/esp8266-rtos-sdk/en/latest/get-started/index.html)
     - bash
     - python
+> NOTE: Consider using Dockerized ESP8266_RTOS_SDK for running your project [repo](https://github.com/brinth/ESP8266_RTOS_SDK_Docker)
 ```bash
  ./prebuild.sh
   make flash monitor
 ```
-    
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
@@ -48,9 +49,9 @@ Requirements
 
 Contributions are always welcome!
 
-See `contributing.md` for ways to get started.
+See [contributing.md](docs/rules/contributing.md) for ways to get started.
 
-Please adhere to this project's `code of conduct`.
+Please adhere to this project's [CODE OF CONDUCT](docs/rules/CODE_OF_CONDUCT.md).
 
 
 ## Documentation
