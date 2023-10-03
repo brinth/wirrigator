@@ -1,26 +1,27 @@
 name: Generate and Host Docs
 
+run-name: ${{ github.actor }} has made changes to main branch or docs/ branch
+
 on:
-  workflow_dispatch:
   push:
     branches:
-      - main
-      - docs/*
+      - 'main'
+      - 'docs/**'
 
 jobs:
-  build:
+  doxygen:
     runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v2
       
-    - name: Doxygen Action
+    - name: Running Doxygen
       uses: mattnotmitt/doxygen-action@v1.9.5
       with:
         doxyfile-path: "./Doxyfile"
         working-directory: "."
 
-    - name: Deploy
+    - name: Deploying to Github Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}

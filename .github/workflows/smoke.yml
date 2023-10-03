@@ -1,0 +1,39 @@
+name: Smoke test for FW Build
+
+run-name: ${{ github.actor }} has made changes to code
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'release/**'
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+
+    container:
+      image: brinth/esp8266_rtos_sdk:main
+      options: --rm --it
+      volumes:
+        - ${{ github.workspace }}:/project
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build Smoke Test
+        working-directory: /project
+        run: make
+
+      - name: Print Result
+        working-directory: /project
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "Build Successful"
+          else
+            echo "Build Broken"
+          fi
