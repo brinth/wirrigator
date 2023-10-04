@@ -31,8 +31,12 @@ jobs:
           cat << EOF >> secret.h
           #ifndef __SECRET_H__
           #define __SECRET_H__
-          #define CONFIG_WIFI_SSID "Fool"
-          #define CONFIG_WIFI_PASS "ing you"
+          #define CONFIG_WIFI_SSID "My WiFi AP"
+          #define CONFIG_WIFI_PASS "Its a secret"
           #endif
           EOF
-          make && echo "Build Success" || echo "Build Broken"
+
+      - name: Building Project
+        working-directory: /project
+        run: |
+          make
