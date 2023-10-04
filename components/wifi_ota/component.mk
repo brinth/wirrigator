@@ -5,7 +5,7 @@ COMPONENT_ADD_INCLUDEDIRS := .
 define embed_img_script
 import base64
 base64_image="NULL"
-with open("../../docs/images/wirrigator_logo.jpg") as img_file:
+with open("../../docs/images/wirrigator_logo.jpg", 'rb') as img_file:
 	base64_image = base64.b64encode(img_file.read()).decode("utf-8")
 with open("index.html","r") as hfile:
 	hcont=hfile.read()
