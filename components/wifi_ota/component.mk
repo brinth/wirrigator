@@ -11,7 +11,7 @@ with open("index.html","r") as hfile:
 	hcont=hfile.read()
 	modhcont=hcont.replace('<img src=""', '<img src="data:image/jpeg;base64,{}"'.format(base64_image))
 with open("index.html","wb") as hfile:
-	hfile.write(modhcont)
+	hfile.write(base64.b64decode(modhcont))
 endef
 
 export embed_img_script
