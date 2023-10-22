@@ -75,16 +75,23 @@ void IrrigationManager :: Init(void) {
 }
 
 void IrrigationManager :: Service(void) {
-	xEventGroupWaitBits(_sys_events, EVENT_BIT(OTA_UPGRADE_START), pdTRUE, pdFALSE, portMAX_DELAY);
+	//xEventGroupWaitBits(_sys_events, EVENT_BIT(OTA_UPGRADE_START), pdTRUE, pdFALSE, portMAX_DELAY);
 	struct tm ctime;
 	if(wifi_sta_status() == STA_CONNECTED) {
 		sntp_get_localtime(&ctime);
-		//if(cur_time_info->tm_hour == 6 || cur_time_info->tm_hour == 18) {
-		if(ctime.tm_sec == 0 || ctime.tm_sec == 30) { // Just for Debug
+		/*
+		if(cur_time_info->tm_hour == 6 || cur_time_info->tm_hour == 18) {
 			valve_open();
 			sys_delay(IRRIGATION_TIME_SEC);
 			valve_close();
 		}
+		*/
+#if DEBUG 
+		valve_open();
+		sys_delay(10);
+		valve_close();
+		sys_delay(10);
+#endif
 	} else printf("ERR: WiFi STA Not Connected\n");
 }
 

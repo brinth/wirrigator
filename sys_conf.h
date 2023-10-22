@@ -41,11 +41,11 @@
 #define MQTT_BROKER_PORT				1886
 
 enum system_pin_desc {
-	VALVE_PIN = 5,
-	FLOW_METER_PIN = 16,
-	GREEN_LED_PIN = 14,
-	YELLOW_LED_PIN = 12,
-	RED_LED_PIN = 13,
+	VALVE_PIN = 15,
+	FLOW_METER_PIN = 13,
+	GREEN_LED_PIN = 16,
+	YELLOW_LED_PIN = 14,
+	RED_LED_PIN = 12,
 };
 
 enum operation_priority {

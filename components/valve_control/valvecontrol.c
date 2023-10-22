@@ -28,7 +28,7 @@ bool valve_open(void) {
 	// Assert GPIO 
 	if(!_init) return false;
 	DPRINTF("%s() Opening Valve -< >-\n", __FUNCTION__);
-	int ret = gpio_set_level(_cfg.pin, (_cfg.logic == VALVE_ACTIVE_LOW) ? true : false);
+	int ret = gpio_set_level(_cfg.pin, (_cfg.logic == VALVE_ACTIVE_HIGH) ? true : false);
 	xEventGroupSetBits(_sys_events, EVENT_BIT(VALVE_OPENED));
 	if(_ops.open) _ops.open(&ret);
 	return (ret == ESP_OK) ? true : false;
@@ -38,7 +38,7 @@ bool valve_close(void) {
 	// Assert GPIO
 	if(!_init) return false;
 	DPRINTF("%s() Closing Valve -<>-\n", __FUNCTION__);
-	int ret = gpio_set_level(_cfg.pin, (_cfg.logic == VALVE_ACTIVE_LOW) ? false : true);
+	int ret = gpio_set_level(_cfg.pin, (_cfg.logic == VALVE_ACTIVE_HIGH) ? false : true);
 	xEventGroupSetBits(_sys_events, EVENT_BIT(VALVE_CLOSED));
 	if(_ops.close) _ops.close(&ret);
 	return (ret == ESP_OK) ? true : false;

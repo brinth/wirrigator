@@ -44,9 +44,15 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        p#uploadStatus {
-            margin-top: 10px;
-            font-weight: bold;
+        #upload_progress {
+            width: 100%;
+            background-color: grey;
+        }
+        #progress_bar {
+            width: 0%;
+            height: 20px;
+            background-color: #007bff;
+            margin: 10px;
         }
     </style>
 </head>
@@ -61,7 +67,9 @@
             <input type="file" id="fileInput" name="file">
             <input type="submit" value="Upload">
         </form>
-        <p id="uploadStatus"></p>
+        <div class="upload_progress">
+            <div id="progress_bar"></div>
+        </div>
     </div>
 
     <script>
@@ -72,8 +80,23 @@
                     return response.text();
                 })
                 .then(function(message) {
-                    var uploadStatus = document.getElementById("uploadStatus");
-                    uploadStatus.innerHTML = message;
+                 //   var uploadStatus = document.getElementById("uploadStatus");
+                  //  uploadStatus.innerHTML = message;
+                    if(i == 0) {
+                        i = 1;
+                        var elem = document.getElementById("progress_bar");
+                        var width = 1;
+                        var id = setInterval(frame, 10);
+                        function frame() {
+                            if(width >= 100) {
+                                clearInterval(id);
+                                i = 0;
+                            } else {
+                            width++;
+                            elem.style.width = width + "%";
+                            }
+                        }
+                    }
                 })
                 .catch(function (error) {
                     console.log("Error", error);
