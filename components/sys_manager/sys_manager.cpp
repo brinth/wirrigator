@@ -75,7 +75,7 @@ void IrrigationManager :: Init(void) {
 }
 
 void IrrigationManager :: Service(void) {
-	xEventGroupWaitBits(_sys_events, EVENT_BIT(OTA_UPGRADE_START), pdTRUE, pdFALSE, portMAX_DELAY);
+	//xEventGroupWaitBits(_sys_events, EVENT_BIT(OTA_UPGRADE_START), pdTRUE, pdFALSE, portMAX_DELAY);
 	struct tm ctime;
 	if(wifi_sta_status() == STA_CONNECTED) {
 		sntp_get_localtime(&ctime);
