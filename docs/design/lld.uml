@@ -1,0 +1,70 @@
+@startuml
+package "WiFi Irrigation System" {
+
+    package "Wemos D1 Mini" {
+        component "WiFi Module" {
+            :Connects to WiFi;
+        }
+        component "MQTT Broker" {
+            :IP and Port configured;
+        }
+        component "SNTP Server" {
+            :Uses NTP Pool Servers;
+        }
+
+        package "Sensors and Actuators" {
+            component "Flow Meter" {
+                :Pin 16;
+            }
+            component "Valve" {
+                :Pin 5;
+            }
+            component "Green LED" {
+                :Pin 14;
+            }
+            component "Yellow LED" {
+                :Pin 12;
+            }
+            component "Red LED" {
+                :Pin 13;
+            }
+        }
+
+        package "FreeRTOS Tasks" {
+            component "OTA Updates" {
+                :Priority = 10;
+            }
+            component "Flow Meter Control" {
+                :Priority = 20;
+            }
+            component "LED Control" {
+                :Priority = 30;
+            }
+        }
+    }
+
+    package "Event Management" {
+        component "WiFi Events" {
+            :CONNECTION_SUCCESS\nFAILURE\nCONNECTING;
+        }
+        component "OTA Events" {
+            :UPGRADE_START\nERROR\nCOMPLETE;
+        }
+        component "Valve Events" {
+            :CLOSED\nOPENED;
+        }
+        component "Flow Events" {
+            :STOPPED\nSTARTED;
+        }
+    }
+
+    package "Delays & Utilities" {
+        component "sys_delay" {
+            :Delay in seconds;
+        }
+        component "sys_delay_msec" {
+            :Delay in milliseconds;
+        }
+    }
+}
+@enduml

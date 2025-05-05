@@ -1,0 +1,67 @@
+@startuml
+package "WiFi Irrigation System" {
+
+    component "Microcontroller Unit"
+    component "WiFi Module"
+    component "Message Broker" {
+        :Configurable IP and Port;
+    }
+    component "Time Sync Server" {
+        :External NTP source;
+    }
+
+    package "Sensors and Actuators" {
+        component "Flow Sensor" {
+            :Connected to digital pin;
+        }
+        component "Water Valve" {
+            :Controlled via output pin;
+        }
+        component "Green Indicator" {
+            :Status LED;
+        }
+        component "Yellow Indicator" {
+            :Warning LED;
+        }
+        component "Red Indicator" {
+            :Error LED;
+        }
+    }
+
+    package "RTOS Tasks" {
+        component "Update Task" {
+            :Priority = High;
+        }
+        component "Sensor Task" {
+            :Priority = Medium;
+        }
+        component "LED Task" {
+            :Priority = Low;
+        }
+    }
+
+    package "Event Handling" {
+        component "Network Events" {
+            :CONNECTED\nDISCONNECTED\nRETRYING;
+        }
+        component "Update Events" {
+            :START\nFAILURE\nSUCCESS;
+        }
+        component "Valve Events" {
+            :OPEN\nCLOSE;
+        }
+        component "Flow Events" {
+            :ACTIVE\nINACTIVE;
+        }
+    }
+
+    package "Utilities" {
+        component "Delay (sec)" {
+            :Wait in seconds;
+        }
+        component "Delay (ms)" {
+            :Wait in milliseconds;
+        }
+    }
+}
+@enduml
