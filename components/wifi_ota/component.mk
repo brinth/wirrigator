@@ -10,7 +10,7 @@ with open("../../docs/images/wirrigator_logo.jpg", 'rb') as img_file:
 with open("index.html","r") as hfile:
 	hcont=hfile.read()
 	modhcont=hcont.replace('<img src=""', '<img src="data:image/jpeg;base64,{}"'.format(base64_image))
-with open("index.html","wb") as hfile:
+with open("index.html","w") as hfile:
 	hfile.write(modhcont)
 endef
 
