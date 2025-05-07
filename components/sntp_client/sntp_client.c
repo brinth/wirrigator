@@ -21,7 +21,7 @@ void sntp_update_localtime(void) {
 	setenv("TZ", "UTC-05:30", 1); //IST
 	tzset();
 	//printf("INFO: Updating local time from NTP Server\n");
-	while(timeinfo.tm_year < (2023 - 1900) && ++retry < SNTP_RETRY_COUNT) {
+	while(timeinfo.tm_year < (2025 - 1900) && ++retry < SNTP_RETRY_COUNT) {
 		printf("INFO: Waiting for system time to be set... (%d)\n", retry);
 		sys_delay(2);
 		time(&now);
