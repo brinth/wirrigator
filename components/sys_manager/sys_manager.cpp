@@ -67,7 +67,7 @@ void IrrigationManager :: Init(void) {
 	}
 	if(wifi_sta_connect()) {
 		sntp_update_localtime();
-		wifi_ota_start();
+		// wifi_ota_start();
 		//mqtt_client_start(MQTT_BROKER_IP, MQTT_BROKER_PORT);
 	} else {
 		printf("ERR: WiFI STA Not Connected\n");
