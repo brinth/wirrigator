@@ -1,0 +1,41 @@
+
+name: [Devel] Smoke test for FW Build
+
+run-name: ${{ github.actor }} has made changes to code
+
+on:
+  push:
+    branches:
+      - 'devel'
+      - 'dev/**'
+      - 'devel/**'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+
+    container:
+      image: brinth/esp8266_rtos_sdk:main
+      options: --rm
+      volumes:
+        - ${{ github.workspace }}:/project
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Creating secret.h
+        working-directory: /project
+        run: |
+          cat << EOF >> secret.h
+          #ifndef __SECRET_H__
+          #define __SECRET_H__
+          #define CONFIG_WIFI_SSID "My WiFi AP"
+          #define CONFIG_WIFI_PASS "Its a secret"
+          #endif
+          EOF
+
+      - name: Building Project
+        working-directory: /project
+        run: |
+          make
