@@ -1,0 +1,10 @@
+# Treat shell and build scripts as text with executable bit
+*.sh text eol=lf
+*.mk text eol=lf
+
+# Preserve executable bit on workflow files (even if they shouldn't be executable)
+.github/workflows/* text eol=lf
+
+# Prevent Git from losing the +x flag
+prebuild.sh text eol=lf
+
