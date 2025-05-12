@@ -69,6 +69,7 @@ void IrrigationManager :: Init(void) {
 		sntp_update_localtime();
 		// TODO(Brinth): Fix FOTA update breaking normal operation before May30?
 		//wifi_ota_start();
+		// TODO(Brinth): Consider MQTT's alternatives
 		//mqtt_client_start(MQTT_BROKER_IP, MQTT_BROKER_PORT);
 	} else {
 		printf("ERR: WiFI STA Not Connected\n");
@@ -76,17 +77,20 @@ void IrrigationManager :: Init(void) {
 }
 
 void IrrigationManager :: Service(void) {
-	//xEventGroupWaitBits(_sys_events, EVENT_BIT(OTA_UPGRADE_START), pdTRUE, pdFALSE, portMAX_DELAY);
 	struct tm ctime;
 	if(wifi_sta_status() == STA_CONNECTED) {
 		sntp_get_localtime(&ctime);
-		//if(cur_time_info->tm_hour == 6 || cur_time_info->tm_hour == 18) {
-		if(ctime.tm_sec == 0 || ctime.tm_sec == 30) { // Just for Debug
+		// TODO(Brinth): Use appropriate timings here and also include volume measurement for cut-off
+		if(ctime.tm_sec == 0 || ctime.tm_sec == 30) { 
 			valve_open();
 			sys_delay(IRRIGATION_TIME_SEC);
 			valve_close();
 		}
-	} else printf("ERR: WiFi STA Not Connected\n");
+		// TODO(Brinth): Also consider putting CPU on sleep ?
+	} else {
+		// TODO(Brinth): Probably put CPU on sleep and try after 1 minute or something
+		printf("ERR: WiFi STA Not Connected\n");
+	}
 }
 
 } //namespace System
