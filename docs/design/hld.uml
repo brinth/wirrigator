@@ -1,0 +1,53 @@
+@startuml
+
+
+node "WeMosD1 mini" {
+  package "Wirrigator" {
+  [flow_meter]
+  [valve_control]
+  [led_control]
+  [mqtt_client]
+  [sntp_client]
+  [sys_manager]
+  [wifi_ota]
+  [wifi_station]
+  }
+  
+  frame "GPIO OUTPUT D1"
+  
+  frame "GPIO INPUT D2"
+  
+  frame "GPIO OUTPUT D3"
+  frame "GPIO OUTPUT D4"
+  frame "GPIO OUTPUT D5"
+}
+
+node "Water Flow Meter" {
+  [GPIO INPUT D2] --> Flowmeter
+}
+
+node "Solenoid Valve" {
+  [GPIO OUTPUT D1] --> SolenoidValve
+}
+
+
+node "LEDs" {
+[GPIO OUTPUT D3] --> Red
+[GPIO OUTPUT D4] --> Yellow
+[GPIO OUTPUT D5] --> Green
+
+}
+
+cloud "WiFi" {
+  frame "WiFi AP"
+}
+
+cloud "SNTP Server" {
+  frame "SNTP endpoint"
+}
+
+[wifi_station] --> [WiFi AP]
+
+[sntp_client] --> [SNTP endpoint]
+
+@enduml
