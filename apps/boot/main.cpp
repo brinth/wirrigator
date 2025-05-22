@@ -1,14 +1,3 @@
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_system.h"
-#include "esp_console.h"
-#include "../sys_conf.h"
-#include "sys_manager.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* * @file
  * @brief This is the entry point component
  */
@@ -19,19 +8,36 @@ extern "C" {
  * Gets Instance of System::Manager class (which is Irrigation Controller)
  * Initializes it and starts Service loop
  */
+#include "sys_manager.h"
+
+static Manager::Manager *managers = {
+	Manager::SysManager::Instance(),
+	Manager::NetworkManager::Instance(),
+	Manager::UpdateManager::Instance(),
+};
+
 void app_main(void) {
 	printf("Starting System...\n");	
 	for(uint8_t i = STARTUP_DELAY; i > 0; --i) { 
 		printf("%d ...\n", i);
 		sys_delay(1);
 	}
-	System::Manager::GetInstance()->Init();
 
-	// Main Service Loop
+	for(const Manager *manager : managers){
+		manager->init();
+	}
+
 	while(true){
-		System::Manager::GetInstance()->Service();
+		for(const Manager *manager : managers){
+			manager->service();
+		}
 		sys_delay(1);
 	}
+
+	for(const Manager *manager : managers){
+		manager->cleanup();
+	}
+
 }
 
 
